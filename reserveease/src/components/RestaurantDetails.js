@@ -2,12 +2,13 @@ import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import restaurants from "../data/restaurants"; // Import shared restaurant data
 
-// PUBLIC_INTERFACE
-function RestaurantDetails() {
-  /**
-   * Shows detailed info for a restaurant, with big image and 'Reserve' option.
-   * Fetches by ID from route param, finds restaurant in shared data.
-   */
+/**
+ * PUBLIC_INTERFACE
+ * RestaurantDetails: Shows detailed info for a restaurant and Reserve button (opens modal via prop).
+ * Props:
+ *   - onReserve: function(restaurantId) (optional, for opening reservation modal)
+ */
+function RestaurantDetails({ onReserve }) {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -103,7 +104,9 @@ function RestaurantDetails() {
                 fontSize: "1.07rem",
                 marginRight: 12,
               }}
-              onClick={() => navigate(`/reserve/${restaurant.id}`)}
+              onClick={() =>
+                onReserve ? onReserve(restaurant.id) : navigate(`/reserve/${restaurant.id}`)
+              }
             >
               Reserve
             </button>
