@@ -58,9 +58,16 @@ const restaurants = [
         text: "Ambiance is nice. The naan bread is fresh.",
         rating: 4,
         date: "2024-06-04T17:45:00Z"
+      },
+      {
+        id: "review_curry_3",
+        reviewerName: "Vikram I.",
+        text: "Nice selection for vegetarians. Spice can be adjusted.",
+        rating: 5,
+        date: "2024-06-05T18:32:00Z"
       }
     ],
-    averageRating: 4.5,
+    averageRating: 4.7, // (5 + 4 + 5) / 3
   },
   {
     id: 3,
@@ -90,9 +97,16 @@ const restaurants = [
         text: "Loved the ambience. Will return soon.",
         rating: 5,
         date: "2024-06-07T20:00:00Z"
+      },
+      {
+        id: "review_sushi_4",
+        reviewerName: "Sophie V.",
+        text: "Great sake menu and friendly staff. Seating is limited.",
+        rating: 4,
+        date: "2024-06-08T18:01:00Z"
       }
     ],
-    averageRating: 4.7,
+    averageRating: 4.5, // (5 + 4 + 5 + 4) / 4
   },
   {
     id: 4,
@@ -115,9 +129,16 @@ const restaurants = [
         text: "Milkshakes are a must-have treat.",
         rating: 5,
         date: "2024-06-04T15:00:00Z"
+      },
+      {
+        id: "review_burg_3",
+        reviewerName: "Lucas N.",
+        text: "Good for families. Try the veggie burger.",
+        rating: 4,
+        date: "2024-06-07T12:40:00Z"
       }
     ],
-    averageRating: 4.5,
+    averageRating: 4.3, // (4 + 5 + 4) / 3
   },
   {
     id: 5,
@@ -147,9 +168,16 @@ const restaurants = [
         text: "",
         rating: 4,
         date: "2024-06-07T15:20:00Z"
+      },
+      {
+        id: "review_green_4",
+        reviewerName: "Derek S.",
+        text: "Loved the smoothie bowl and green decor. Very clean.",
+        rating: 5,
+        date: "2024-06-08T14:03:00Z"
       }
     ],
-    averageRating: 4.3
+    averageRating: 4.5 // (5 + 4 + 4 + 5) / 4
   },
 ];
 
