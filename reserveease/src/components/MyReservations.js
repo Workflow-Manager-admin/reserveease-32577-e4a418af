@@ -27,25 +27,40 @@ function MyReservations({
 
   // Render confirmation dialog (browser built-in for simplicity)
   function handleCancel(res) {
-    // Verbose logging: print the reservation to be cancelled with id and type
-    console.log('[MyReservations.handleCancel] Attempting to cancel reservation object:', res, 'id:', res.id, 'type:', typeof res.id);
+    // Strong debug: log *all* relevant info before, during, and after cancel call, as well as object identity
+    console.log(
+      '[MyReservations.handleCancel] Handler invoked!',
+      '\n Reservation object:', res,
+      '\n id:', res.id, '(type:', typeof res.id + ')',
+      '\n parent onCancelReservation exists:', !!onCancelReservation
+    );
     if (
       window.confirm(
         `Cancel your reservation at "${res.restaurantName}" on ${res.date} at ${res.time}?`
       )
     ) {
-      // Log before passing up to parent
       if (!res.id) {
-        console.warn('[MyReservations.handleCancel] Reservation has no id:', res);
+        console.warn('[MyReservations.handleCancel] Reservation has no id property or falsy:', res);
       }
-      // Debug: check parent's existence/type, and log reservations before/after for this click
+      // Deep object identity log
+      console.log('[MyReservations.handleCancel] Passing up reservation id to parent:', res.id, '(typeof:', typeof res.id, ') objectRef?', res);
       if (onCancelReservation) {
-        onCancelReservation(res.id);
-        // No local reservations update here; parent is responsible. UI will update after App updates state.
-        // If cancellation does not work, parent-level logs (added in App.js) will surface the cause.
+        // Defensive: wrap in try/catch for debug
+        try {
+          console.log(
+            '[MyReservations.handleCancel] Will call parent onCancelReservation with id:',
+            res.id, 'Current ts:', Date.now()
+          );
+          onCancelReservation(res.id);
+          console.log('[MyReservations.handleCancel] Called parent onCancelReservation(res.id).');
+        } catch (err) {
+          console.error('[MyReservations.handleCancel] Error invoking parent cancel handler:', err);
+        }
       } else {
-        console.warn('[MyReservations.handleCancel] onCancelReservation prop not defined.');
+        console.warn('[MyReservations.handleCancel] onCancelReservation prop not defined or falsy. ID was:', res.id, 'object:', res);
       }
+    } else {
+      console.log('[MyReservations.handleCancel] User declined cancellation dialog.');
     }
   }
 
