@@ -43,12 +43,19 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
   useEffect(() => {
     setDate(initialDetails.date || "");
     setTime(initialDetails.time || "");
-    setGuests(initialDetails.guests || 2);
+    setGuests(
+      typeof initialDetails.guests === "number"
+        ? String(initialDetails.guests)
+        : initialDetails.guests || "2"
+    );
     setContactName(initialDetails.contactName || "");
     setContactEmail(initialDetails.contactEmail || "");
     setContactPhone(initialDetails.contactPhone || "");
     setErrors({});
     didFirstInit.current = true;
+    // Debug: Show reset on modal/restaurant change
+    // eslint-disable-next-line no-console
+    console.log("[ReservationForm] Reset fields: date", initialDetails.date, "time", initialDetails.time, "guests", initialDetails.guests);
     // eslint-disable-next-line
   }, [resetKey]);
 
@@ -78,6 +85,9 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
         contactEmail,
         contactPhone,
       };
+      // Debug print to examine field values on submit
+      // eslint-disable-next-line no-console
+      console.log("[ReservationForm] Submitting reservation with:", reservationData);
       if (onSubmit) {
         onSubmit(reservationData);
       } else {
@@ -132,7 +142,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             id="reservation-date"
             type="date"
             min={new Date().toISOString().split("T")[0]}
-            value={date}
+            value={date || ""}
             onChange={handleDateChange}
             style={inputStyle(errors.date)}
             autoComplete="off"
@@ -164,7 +174,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             type="number"
             min={1}
             max={24}
-            value={guests}
+            value={guests || "2"}
             onChange={handleGuestsChange}
             style={inputStyle(errors.guests)}
           />
