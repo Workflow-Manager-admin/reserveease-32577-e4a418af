@@ -131,6 +131,19 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
     console.log("[ReservationForm] contactPhone onChange", e.target.value);
     setContactPhone(e.target.value);
   };
+  // Table preference handlers
+  const handleTableAreaChange = (e) => {
+    console.log("[ReservationForm] tableArea onChange", e.target.value);
+    setTableArea(e.target.value);
+  };
+  const handleWindowSeatChange = (e) => {
+    console.log("[ReservationForm] windowSeat onChange", e.target.value);
+    setWindowSeat(e.target.value === "true" ? true : e.target.value === "false" ? false : "");
+  };
+  const handleSpecialRequestChange = (e) => {
+    console.log("[ReservationForm] specialRequest onChange", e.target.value);
+    setSpecialRequest(e.target.value);
+  };
 
   // --- Input elements: NO disabled/readOnly, only state value binding, all changes are debuggable ---
   return (
