@@ -55,7 +55,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
     didFirstInit.current = true;
     // Debug: Show reset on modal/restaurant change
     // eslint-disable-next-line no-console
-    console.log("[ReservationForm] Reset fields: date", initialDetails.date, "time", initialDetails.time, "guests", initialDetails.guests);
+    // console.log("[ReservationForm] Reset fields: date", initialDetails.date, "time", initialDetails.time, "guests", initialDetails.guests);
     // eslint-disable-next-line
   }, [resetKey]);
 
@@ -85,15 +85,8 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
         contactEmail,
         contactPhone,
       };
-      // Debug print to examine field values on submit
-      // eslint-disable-next-line no-console
-      console.log("[ReservationForm] Submitting reservation with:", reservationData);
       if (onSubmit) {
         onSubmit(reservationData);
-      } else {
-        // Debug fallback log
-        // eslint-disable-next-line no-console
-        console.log("Reservation submitted:", reservationData);
       }
     }
   }
@@ -131,7 +124,6 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
       >
         {restaurantName ?? "Reserve a Table"}
       </h2>
-
       <form onSubmit={handleFormSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         {/* Date */}
         <div style={formGroupStyle}>
@@ -146,6 +138,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             onChange={handleDateChange}
             style={inputStyle(errors.date)}
             autoComplete="off"
+            required
           />
           {errors.date && <div style={errorStyle}>{errors.date}</div>}
         </div>
@@ -161,6 +154,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             onChange={handleTimeChange}
             style={inputStyle(errors.time)}
             autoComplete="off"
+            required
           />
           {errors.time && <div style={errorStyle}>{errors.time}</div>}
         </div>
@@ -177,6 +171,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             value={guests || "2"}
             onChange={handleGuestsChange}
             style={inputStyle(errors.guests)}
+            required
           />
           {errors.guests && <div style={errorStyle}>{errors.guests}</div>}
         </div>
@@ -193,6 +188,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             style={inputStyle(errors.contactName)}
             placeholder="Your name"
             autoComplete="name"
+            required
           />
           {errors.contactName && <div style={errorStyle}>{errors.contactName}</div>}
         </div>
