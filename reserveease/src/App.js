@@ -83,12 +83,19 @@ function App() {
         )
       : null;
 
+    // Memoize initialDetails so the object reference is stable unless the restaurant changes
+    const reservationInitialDetails = React.useMemo(() => {
+      return currentRestaurant
+        ? { restaurantId: currentRestaurant.id }
+        : {};
+    }, [currentRestaurant]);
+
     // Render the reservation modal when open
     const reservationModal = (
       <Modal isOpen={modalOpen} onClose={closeReservationModal}>
         {currentRestaurant && (
           <ReservationForm
-            initialDetails={{ restaurantId: currentRestaurant.id }}
+            initialDetails={reservationInitialDetails}
             restaurantName={currentRestaurant.name}
             restaurant={currentRestaurant}
             onSubmit={handleReservationSubmit}
