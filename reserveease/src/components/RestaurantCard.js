@@ -75,9 +75,26 @@ function RestaurantCard({
         </div>
         {showAverageRating && typeof restaurant.averageRating === "number" && (
           <div style={{ marginTop: 3, marginBottom: 2, display: "flex", alignItems: "center", gap: 6 }}>
+            {/* Render stars: solid (★) for filled, empty (☆) for unfilled */}
             <span style={{ color: "#FFC95B", fontSize: 19 }}>
-              {"★".repeat(Math.round(restaurant.averageRating)) +
-               "☆".repeat(5 - Math.round(restaurant.averageRating))}
+              {
+                (() => {
+                  // Compute full/half/empty stars for fractional display
+                  const stars = [];
+                  const rating = Number(restaurant.averageRating) || 0;
+                  for (let i = 1; i <= 5; i++) {
+                    if (i <= Math.floor(rating)) {
+                      stars.push(<span key={"f" + i}>★</span>);
+                    } else if (i - rating <= 0.5 && rating % 1 !== 0) {
+                      // Optionally support half star (not with Unicode, but keep code ready)
+                      stars.push(<span key={"h" + i} style={{ opacity: 0.6 }}>★</span>);
+                    } else {
+                      stars.push(<span key={"e" + i}>☆</span>);
+                    }
+                  }
+                  return stars;
+                })()
+              }
             </span>
             <span style={{ color: "#FFC95B", fontSize: 15, fontWeight: 500, marginLeft: 2 }}>
               {restaurant.averageRating.toFixed(1)}
