@@ -12,8 +12,30 @@ const restaurants = [
     location: "Midtown",
     cuisine: "Italian",
     description: "A cozy Italian spot with hand-made pasta.",
-    reviews: [],
-    averageRating: null, // Number or null
+    reviews: [
+      {
+        id: "review_pasta_1",
+        reviewerName: "Emily R.",
+        text: "Delicious pasta and cozy atmosphere. Highly recommend the carbonara!",
+        rating: 5,
+        date: "2024-06-01T18:46:00Z"
+      },
+      {
+        id: "review_pasta_2",
+        reviewerName: "Mark T.",
+        text: "Service was friendly and portions were just right.",
+        rating: 4,
+        date: "2024-06-03T19:10:00Z"
+      },
+      {
+        id: "review_pasta_3",
+        reviewerName: "Amelia P.",
+        text: "",
+        rating: 4,
+        date: "2024-06-05T19:00:00Z"
+      }
+    ],
+    averageRating: 4.3, // (5 + 4 + 4) / 3
   },
   {
     id: 2,
@@ -22,8 +44,23 @@ const restaurants = [
     location: "Downtown",
     cuisine: "Indian",
     description: "Spicy, authentic curries in a warm setting.",
-    reviews: [],
-    averageRating: null,
+    reviews: [
+      {
+        id: "review_curry_1",
+        reviewerName: "Amit P.",
+        text: "Flavors are just right. Loved the paneer tikka masala.",
+        rating: 5,
+        date: "2024-06-02T20:15:00Z"
+      },
+      {
+        id: "review_curry_2",
+        reviewerName: "Samantha W.",
+        text: "Ambiance is nice. The naan bread is fresh.",
+        rating: 4,
+        date: "2024-06-04T17:45:00Z"
+      }
+    ],
+    averageRating: 4.5,
   },
   {
     id: 3,
@@ -32,8 +69,30 @@ const restaurants = [
     location: "Uptown",
     cuisine: "Japanese",
     description: "Fresh sushi and sashimi with modern flair.",
-    reviews: [],
-    averageRating: null,
+    reviews: [
+      {
+        id: "review_sushi_1",
+        reviewerName: "Kenji K.",
+        text: "Very fresh fish. Best place for sushi in town.",
+        rating: 5,
+        date: "2024-06-03T19:01:00Z"
+      },
+      {
+        id: "review_sushi_2",
+        reviewerName: "Lily C.",
+        text: "Rolls are creative, but some were overpriced.",
+        rating: 4,
+        date: "2024-06-05T18:20:00Z"
+      },
+      {
+        id: "review_sushi_3",
+        reviewerName: "Arjun M.",
+        text: "Loved the ambience. Will return soon.",
+        rating: 5,
+        date: "2024-06-07T20:00:00Z"
+      }
+    ],
+    averageRating: 4.7,
   },
   {
     id: 4,
@@ -42,8 +101,23 @@ const restaurants = [
     location: "West End",
     cuisine: "American",
     description: "Juicy burgers, shakes, and fries for all.",
-    reviews: [],
-    averageRating: null,
+    reviews: [
+      {
+        id: "review_burg_1",
+        reviewerName: "David S.",
+        text: "Classic burgers and crispy fries.",
+        rating: 4,
+        date: "2024-06-02T17:30:00Z"
+      },
+      {
+        id: "review_burg_2",
+        reviewerName: "Ella Q.",
+        text: "Milkshakes are a must-have treat.",
+        rating: 5,
+        date: "2024-06-04T15:00:00Z"
+      }
+    ],
+    averageRating: 4.5,
   },
   {
     id: 5,
@@ -52,8 +126,30 @@ const restaurants = [
     location: "South Park",
     cuisine: "Vegetarian",
     description: "Organic vegetarian & vegan delights.",
-    reviews: [],
-    averageRating: null,
+    reviews: [
+      {
+        id: "review_green_1",
+        reviewerName: "Paula H.",
+        text: "Super fresh salads and creative vegan bites.",
+        rating: 5,
+        date: "2024-06-01T13:00:00Z"
+      },
+      {
+        id: "review_green_2",
+        reviewerName: "Leo M.",
+        text: "Pleasant staff. Desserts could improve.",
+        rating: 4,
+        date: "2024-06-06T12:25:00Z"
+      },
+      {
+        id: "review_green_3",
+        reviewerName: "Megan R.",
+        text: "",
+        rating: 4,
+        date: "2024-06-07T15:20:00Z"
+      }
+    ],
+    averageRating: 4.3
   },
 ];
 
