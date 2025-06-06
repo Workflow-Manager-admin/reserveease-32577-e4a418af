@@ -10,6 +10,12 @@ import React from "react";
  */
 function Modal({ isOpen, children, onClose }) {
   if (!isOpen) return null;
+
+  // Clicking the overlay (not the modal content) closes the modal.
+  // The overlay and modal content are siblings, so to guarantee correct event handling,
+  // we restructure as follows: a single overlay <div> (fills screen) handles onClick, and 
+  // clicking inside the child modal content stops propagation, thus only overlay clicks trigger close.
+
   return (
     <div
       style={{
@@ -26,6 +32,7 @@ function Modal({ isOpen, children, onClose }) {
       }}
       role="dialog"
       aria-modal="true"
+      onClick={onClose} // click-outside closes modal
     >
       <div
         style={{
@@ -37,7 +44,7 @@ function Modal({ isOpen, children, onClose }) {
           position: "relative",
           boxShadow: "0 8px 48px rgba(18,43,63,0.18)",
         }}
-        onClick={e => e.stopPropagation()} // Prevent closing when clicking modal
+        onClick={e => e.stopPropagation()} // Prevent inside clicks from propagating to overlay
       >
         <button
           onClick={onClose}
@@ -59,16 +66,6 @@ function Modal({ isOpen, children, onClose }) {
         </button>
         <div>{children}</div>
       </div>
-      {/* Overlay click closes modal */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: 'fixed',
-          top:0, left:0, width:"100vw", height:"100vh",
-          zIndex:199,
-        }}
-        onClick={onClose}
-      />
     </div>
   );
 }
