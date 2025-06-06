@@ -46,27 +46,25 @@ const sampleRestaurants = [
   },
 ];
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * Main page displaying scrollable list of restaurant cards.
+ * Renders sample restaurants and provides stubs for card actions.
+ */
 function RestaurantList() {
-  /**
-   * Main page displaying scrollable list of restaurant cards.
-   * Renders sample restaurants and provides stubs for card actions.
-   */
+  const navigate = useNavigate();
 
-  // Stub for opening details (to be routed in full app)
+  // Navigate to the RestaurantDetails page using restaurant ID as a route parameter
   const handleOpenDetails = (restaurantId) => {
-    // Next: Navigate or open modal for restaurant details
-    // eslint-disable-next-line no-console
-    console.log("Open details for restaurant:", restaurantId);
-    // Future: use navigate(`/details/${restaurantId}`)
+    navigate(`/details/${restaurantId}`);
   };
 
-  // Stub for reservation action (to be hooked up to reservation modal/page)
+  // Reservation action stub (will later route to reservation)
   const handleClickReserve = (restaurantId) => {
-    // Next: Open reservation flow/modal
+    // Next: Open reservation flow/modal or navigate to reservation form
     // eslint-disable-next-line no-console
     console.log("Open reserve modal for restaurant:", restaurantId);
-    // Future: use navigate(`/reserve/${restaurantId}`)
+    // Future: navigate(`/reserve/${restaurantId}`)
   };
 
   return (
