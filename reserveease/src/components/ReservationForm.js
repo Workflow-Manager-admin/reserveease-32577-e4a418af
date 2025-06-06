@@ -149,12 +149,16 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
   return (
     <div
       style={{
-        margin: "56px auto 0 auto",
+        margin: "0 auto", // Remove extra top margin inherited from modal
         maxWidth: 430,
         background: "rgba(31,36,51,0.99)",
         padding: "38px 30px 30px 30px",
         borderRadius: 16,
         boxShadow: "0 4px 20px rgba(18,43,63,0.10)",
+        // Let Modal control height & scroll. Don't set explicit maxHeight/minHeight here.
+        width: "100%",
+        boxSizing: "border-box",
+        overflow: "visible" // let parent modal handle scroll, not here
       }}
       role="form"
       aria-label="Reservation Form"
