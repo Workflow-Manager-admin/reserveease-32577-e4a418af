@@ -134,8 +134,8 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             id="reservation-date"
             type="date"
             min={new Date().toISOString().split("T")[0]}
-            value={date || ""}
-            onChange={handleDateChange}
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
             style={inputStyle(errors.date)}
             autoComplete="off"
             required
@@ -151,7 +151,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             id="reservation-time"
             type="time"
             value={time}
-            onChange={handleTimeChange}
+            onChange={(e) => setTime(e.target.value)}
             style={inputStyle(errors.time)}
             autoComplete="off"
             required
@@ -168,8 +168,8 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             type="number"
             min={1}
             max={24}
-            value={guests || "2"}
-            onChange={handleGuestsChange}
+            value={guests}
+            onChange={(e) => setGuests(e.target.value)}
             style={inputStyle(errors.guests)}
             required
           />
@@ -184,7 +184,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             id="reservation-name"
             type="text"
             value={contactName}
-            onChange={handleContactNameChange}
+            onChange={(e) => setContactName(e.target.value)}
             style={inputStyle(errors.contactName)}
             placeholder="Your name"
             autoComplete="name"
@@ -201,7 +201,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             id="reservation-email"
             type="email"
             value={contactEmail}
-            onChange={handleContactEmailChange}
+            onChange={(e) => setContactEmail(e.target.value)}
             style={inputStyle(errors.contactContact)}
             placeholder="Email (or use phone below)"
             autoComplete="email"
@@ -216,7 +216,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             id="reservation-phone"
             type="tel"
             value={contactPhone}
-            onChange={handleContactPhoneChange}
+            onChange={(e) => setContactPhone(e.target.value)}
             style={inputStyle(errors.contactContact)}
             placeholder="Phone (or use email above)"
             autoComplete="tel"
