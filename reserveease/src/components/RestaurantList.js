@@ -44,6 +44,19 @@ function RestaurantList({ onReserve }) {
       >
         Browse Restaurants
       </h1>
+      {/* Google Map embed for city/region (static for demo) */}
+      <div style={{ marginBottom: 22, borderRadius: 12, overflow: "hidden", border: "1.5px solid var(--border-color)", boxShadow: "0 1px 7px rgba(30,80,120,0.07)" }}>
+        <iframe
+          title="Restaurant Map"
+          width="100%"
+          height="250"
+          style={{ border: 0, filter: "grayscale(0.13)" }}
+          loading="lazy"
+          allowFullScreen
+          referrerPolicy="no-referrer-when-downgrade"
+          src="https://www.google.com/maps/embed/v1/search?q=restaurant+Midtown+city&key=&zoom=12"
+        />
+      </div>
       {restaurants.map((restaurant) => (
         <RestaurantCard
           key={restaurant.id}
