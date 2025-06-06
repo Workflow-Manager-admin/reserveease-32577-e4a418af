@@ -53,7 +53,7 @@ function RestaurantList({ onReserve, isFavourite, onToggleFavourite, restaurants
           onClickReserve={handleClickReserve}
           isFavourite={isFavourite}
           onToggleFavourite={onToggleFavourite}
-          showAverageRating={true}
+          showAverageRating={true} // Ensure always shows
         />
       ))}
       <div style={{ height: 12 }} />

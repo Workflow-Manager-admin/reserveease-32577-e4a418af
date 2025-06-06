@@ -73,35 +73,44 @@ function RestaurantCard({
         <div style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>
           {restaurant.location} &bull; {restaurant.cuisine}
         </div>
-        {showAverageRating && typeof restaurant.averageRating === "number" && (
+        {showAverageRating && (
           <div style={{ marginTop: 3, marginBottom: 2, display: "flex", alignItems: "center", gap: 6 }}>
-            {/* Render stars: solid (★) for filled, empty (☆) for unfilled */}
-            <span style={{ color: "#FFC95B", fontSize: 19 }}>
-              {
-                (() => {
-                  // Compute full/half/empty stars for fractional display
-                  const stars = [];
-                  const rating = Number(restaurant.averageRating) || 0;
-                  for (let i = 1; i <= 5; i++) {
-                    if (i <= Math.floor(rating)) {
-                      stars.push(<span key={"f" + i}>★</span>);
-                    } else if (i - rating <= 0.5 && rating % 1 !== 0) {
-                      // Optionally support half star (not with Unicode, but keep code ready)
-                      stars.push(<span key={"h" + i} style={{ opacity: 0.6 }}>★</span>);
-                    } else {
-                      stars.push(<span key={"e" + i}>☆</span>);
+            {/* Render star ratings based on average computed from reviews */}
+            {(() => {
+              // Average rating - prefer live calculation if not present
+              const reviews = restaurant.reviews || [];
+              let avg = typeof restaurant.averageRating === "number"
+                ? restaurant.averageRating
+                : (
+                  reviews.length > 0
+                    ? Math.round(
+                        (reviews.reduce((sum, r) => sum + (parseInt(r.rating || 0, 10)), 0) / reviews.length) * 10
+                      ) / 10
+                    : null
+                );
+              if (typeof avg !== "number") avg = 0;
+              // Generate star icons
+              return (
+                <>
+                  <span style={{ color: "#FFC95B", fontSize: 19 }}>
+                    {
+                      [...Array(5)].map((_, i) => {
+                        // Full star if less than average, partial/empty otherwise
+                        if (i < Math.floor(avg)) return <span key={"f" + i}>★</span>;
+                        if (i < avg) return <span key={"h" + i} style={{ opacity: 0.55 }}>★</span>;
+                        return <span key={"e" + i}>☆</span>;
+                      })
                     }
-                  }
-                  return stars;
-                })()
-              }
-            </span>
-            <span style={{ color: "#FFC95B", fontSize: 15, fontWeight: 500, marginLeft: 2 }}>
-              {restaurant.averageRating.toFixed(1)}
-            </span>
-            <span style={{ color: "#bbb", fontSize: 13 }}>
-              ({(restaurant.reviews || []).length} review{(restaurant.reviews||[]).length === 1 ? "" : "s"})
-            </span>
+                  </span>
+                  <span style={{ color: "#FFC95B", fontSize: 15, fontWeight: 500, marginLeft: 2 }}>
+                    {avg.toFixed(1)}
+                  </span>
+                  <span style={{ color: "#bbb", fontSize: 13 }}>
+                    ({reviews.length} review{reviews.length === 1 ? "" : "s"})
+                  </span>
+                </>
+              );
+            })()}
           </div>
         )}
         <div style={{
