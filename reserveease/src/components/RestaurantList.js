@@ -7,8 +7,10 @@ import restaurants from "../data/restaurants"; // Import shared restaurant data
  * PUBLIC_INTERFACE
  * Main page displaying scrollable list of restaurant cards.
  * Renders sample restaurants and provides stubs for card actions.
+ * Props:
+ *   - onReserve: function(restaurantId) to open modal (from app)
  */
-function RestaurantList() {
+function RestaurantList({ onReserve }) {
   const navigate = useNavigate();
 
   // Navigate to the RestaurantDetails page using restaurant ID as a route parameter
@@ -16,12 +18,9 @@ function RestaurantList() {
     navigate(`/details/${restaurantId}`);
   };
 
-  // Reservation action stub (will later route to reservation)
+  // Pass app-level onReserve directly to RestaurantCard
   const handleClickReserve = (restaurantId) => {
-    // Next: Open reservation flow/modal or navigate to reservation form
-    // eslint-disable-next-line no-console
-    console.log("Open reserve modal for restaurant:", restaurantId);
-    // Future: navigate(`/reserve/${restaurantId}`)
+    if (onReserve) onReserve(restaurantId);
   };
 
   return (
