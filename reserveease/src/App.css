@@ -1,6 +1,11 @@
 :root {
-  --base-light: #00ffff;
-  --base-dark: #00008b;
+  /* ReserveEase color palette variables */
+  --primary: #2D9CDB;
+  --secondary: #F2F2F2;
+  --accent: #27AE60;
+
+  /* Dark theme base */
+  --background-dark: #1A1A1A;
   --text-color: #ffffff;
   --text-secondary: rgba(255, 255, 255, 0.7);
   --border-color: rgba(255, 255, 255, 0.1);
