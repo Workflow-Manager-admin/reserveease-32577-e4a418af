@@ -23,13 +23,15 @@ function App() {
   // In-memory state for reservations in current session
   const [reservations, setReservations] = useState([]);
 
-  // Navigation helper hook
-  // Only available in a child component under Router; so we use a wrapper below
+  // Track if editing (reservationId/null) and prefill
+  const [editingReservationId, setEditingReservationId] = React.useState(null);
+  const [editInitialDetails, setEditInitialDetails] = React.useState({});
 
-  // Open reservation modal for a specific restaurant
   // PUBLIC_INTERFACE
   function openReservationModal(restaurantId) {
     setSelectedRestaurantId(restaurantId);
+    setEditingReservationId(null);
+    setEditInitialDetails({});
     setModalOpen(true);
   }
 
@@ -37,6 +39,8 @@ function App() {
   function closeReservationModal() {
     setModalOpen(false);
     setSelectedRestaurantId(null);
+    setEditingReservationId(null);
+    setEditInitialDetails({});
   }
 
   // Generate a unique reservation id
@@ -49,37 +53,55 @@ function App() {
     );
   };
 
-  // Wrapper to provide navigate for save handler
   function AppWithNavigate() {
     const navigate = useNavigate();
-    const location = useLocation();
 
-    // Save reservation handler
-    // PUBLIC_INTERFACE
+    /**
+     * Handles both adding a new reservation and editing an existing one.
+     * If editingReservationId is set, it updates the existing reservation.
+     */
     function handleReservationSubmit(formData) {
-      // Attach restaurantId (if not present) and generate unique reservation id
-      const restaurantId =
-        (formData.restaurantId ?? selectedRestaurantId) ?? null;
-      const restaurant =
-        restaurants.find(
-          (r) => String(r.id) === String(restaurantId)
-        ) || {};
-      const reservation = {
-        id: generateReservationId(),
-        restaurantId: restaurantId,
-        restaurantName: restaurant.name,
-        ...formData,
-      };
-      setReservations((prev) => [...prev, reservation]);
+      let reservation, isEdit = false;
+      if (editingReservationId) {
+        // Update
+        const prev = reservations.find((r) => r.id === editingReservationId);
+        const restaurantId = formData.restaurantId ?? prev?.restaurantId;
+        const restaurant = restaurants.find(r => String(r.id) === String(restaurantId)) || {};
+        reservation = {
+          ...prev,
+          ...formData,
+          restaurantId,
+          restaurantName: restaurant.name,
+          id: editingReservationId,
+        };
+        setReservations((prevArr) =>
+          prevArr.map((r) => (r.id === editingReservationId ? reservation : r))
+        );
+        isEdit = true;
+      } else {
+        // Add new
+        const restaurantId =
+          (formData.restaurantId ?? selectedRestaurantId) ?? null;
+        const restaurant =
+          restaurants.find(
+            (r) => String(r.id) === String(restaurantId)
+          ) || {};
+        reservation = {
+          id: generateReservationId(),
+          restaurantId,
+          restaurantName: restaurant.name,
+          ...formData,
+        };
+        setReservations((prev) => [...prev, reservation]);
+      }
 
-      // Reminder notification logic (only if Notification API available)
+      // Notification logic (unchanged)
       try {
         if ('Notification' in window) {
           if (Notification.permission === "default") {
-            Notification.requestPermission(); // non-blocking, will be honored on next booking
+            Notification.requestPermission();
           }
           if (Notification.permission === "granted") {
-            // Compute 1h before reservation
             const dateStr = reservation.date || "";
             const timeStr = reservation.time || "";
             if (dateStr && timeStr) {
@@ -87,9 +109,8 @@ function App() {
               if (!isNaN(resDate.getTime())) {
                 const before1h = new Date(resDate.getTime() - 60 * 60 * 1000);
                 const msDelay = before1h.getTime() - Date.now();
-                if (msDelay > 5000) {  // ignore notifications for past or <5s-away errors
+                if (msDelay > 5000) {
                   setTimeout(() => {
-                    // Notification content (limit to base info)
                     new Notification("Reservation Reminder", {
                       body: `You have a reservation at ${reservation.restaurantName || 'the restaurant'} at ${reservation.time}.`
                     });
@@ -106,34 +127,56 @@ function App() {
       }
 
       closeReservationModal();
-      // Redirect to confirmation with reservation details (use location state)
+
+      // Redirect to confirmation for new or edited reservation
       navigate('/confirmation', { state: { reservation } });
     }
 
-    // Get restaurant object for modal prefill
+    // PUBLIC_INTERFACE -- Cancel reservation
+    function handleCancelReservation(reservationId) {
+      setReservations((prev) => prev.filter((r) => r.id !== reservationId));
+    }
+
+    // PUBLIC_INTERFACE -- Edit reservation: open modal prefilled
+    function handleEditReservation(reservationObj) {
+      if (!reservationObj) return;
+      setEditInitialDetails({
+        ...reservationObj,
+        restaurantId: reservationObj.restaurantId,
+      });
+      setEditingReservationId(reservationObj.id);
+      setSelectedRestaurantId(reservationObj.restaurantId);
+      setModalOpen(true);
+    }
+
+    // Get restaurant object for modal prefill (edit or add)
     const currentRestaurant = selectedRestaurantId
       ? restaurants.find(
           (r) => String(r.id) === String(selectedRestaurantId)
         )
       : null;
 
-    // Memoize initialDetails so the object reference is stable unless the restaurant changes
+    // Edit or Add initial details
     const reservationInitialDetails = React.useMemo(() => {
+      if (editingReservationId && editInitialDetails && editInitialDetails.id) {
+        return { ...editInitialDetails };
+      }
       return currentRestaurant
         ? { restaurantId: currentRestaurant.id }
         : {};
-    }, [currentRestaurant]);
+    }, [currentRestaurant, editingReservationId, editInitialDetails]);
 
-    // Render the reservation modal when open
     const reservationModal = (
       <Modal isOpen={modalOpen} onClose={closeReservationModal}>
         {currentRestaurant && (
           <ReservationForm
+            key={String(editingReservationId) + "|" + String(currentRestaurant?.id)}
             initialDetails={reservationInitialDetails}
             restaurantName={currentRestaurant.name}
             restaurant={currentRestaurant}
             onSubmit={handleReservationSubmit}
             onCancel={closeReservationModal}
+            isEditing={!!editingReservationId}
           />
         )}
       </Modal>
@@ -141,7 +184,7 @@ function App() {
 
     return (
       <>
-        {/* Modal for reservation, appears above all routes */}
+        {/* Modal for reservation (new or edit) */}
         {reservationModal}
         <main>
           <div className="container">
@@ -162,7 +205,6 @@ function App() {
                   />
                 }
               />
-              {/* Page route for reservation is still shown for back compat, but modal is primary */}
               <Route
                 path="/reserve/:id"
                 element={
