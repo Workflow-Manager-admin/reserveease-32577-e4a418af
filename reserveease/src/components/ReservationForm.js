@@ -38,6 +38,11 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
   const [contactPhone, setContactPhone] = useState(initialDetails.contactPhone || "");
   const [errors, setErrors] = useState({});
 
+  // Table Preferences and Special Request
+  const [tableArea, setTableArea] = useState(initialDetails.tableArea || "");
+  const [windowSeat, setWindowSeat] = useState(typeof initialDetails.windowSeat !== "undefined" ? initialDetails.windowSeat : "");
+  const [specialRequest, setSpecialRequest] = useState(initialDetails.specialRequest || "");
+
   // For reset-on-modal-open only
   const didFirstInit = useRef(false);
 
@@ -53,6 +58,10 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
     setContactName(initialDetails.contactName || "");
     setContactEmail(initialDetails.contactEmail || "");
     setContactPhone(initialDetails.contactPhone || "");
+    // new fields:
+    setTableArea(initialDetails.tableArea || "");
+    setWindowSeat(typeof initialDetails.windowSeat !== "undefined" ? initialDetails.windowSeat : "");
+    setSpecialRequest(initialDetails.specialRequest || "");
     setErrors({});
     didFirstInit.current = true;
     // Debug - log every resetKey-triggered reset

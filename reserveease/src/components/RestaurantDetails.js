@@ -84,7 +84,21 @@ function RestaurantDetails({ onReserve }) {
           >
             {restaurant.location} &bull; {restaurant.cuisine}
           </div>
-
+          {/* Google Map embed for this restaurant by name/location */}
+          <div style={{ margin: "14px 0 18px 0", borderRadius: 8, overflow: "hidden", border: "1.5px solid var(--border-color)" }}>
+            <iframe
+              title="Map"
+              width="100%"
+              height="170"
+              style={{ border: 0, filter: "grayscale(0.18)" }}
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+              src={`https://www.google.com/maps/embed/v1/search?q=${encodeURIComponent(
+                restaurant.name + " " + restaurant.location
+              )}&key=&zoom=15`}
+            />
+          </div>
           <div
             style={{
               margin: "14px 0",
