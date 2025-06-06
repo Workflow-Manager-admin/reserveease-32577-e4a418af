@@ -26,7 +26,11 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
   // Local state for all fields. Initialized only when resetKey changes.
   const [date, setDate] = useState(initialDetails.date || "");
   const [time, setTime] = useState(initialDetails.time || "");
-  const [guests, setGuests] = useState(initialDetails.guests || 2);
+  const [guests, setGuests] = useState(
+    typeof initialDetails.guests === "number"
+      ? String(initialDetails.guests)
+      : initialDetails.guests || "2"
+  );
   const [contactName, setContactName] = useState(initialDetails.contactName || "");
   const [contactEmail, setContactEmail] = useState(initialDetails.contactEmail || "");
   const [contactPhone, setContactPhone] = useState(initialDetails.contactPhone || "");
