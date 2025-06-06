@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 /**
  * PUBLIC_INTERFACE
@@ -12,9 +12,14 @@ import React, { useState } from "react";
  *   - onCancel: () => void (optional, for modal close)
  *   - initialDetails: object (optional, for prefill)
  *   - restaurantName: string (optional, heading)
+ *   - restaurant: object (full restaurant data if provided)
+ * 
+ * The state for all input fields is initialized and reset ONLY when the modal opens
+ * (as reflected by a change in the initialDetails prop, which resets on restaurant/modal state change),
+ * not on every render. All input fields are fully controlled.
  */
-function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantName }) {
-  // Controlled input states
+function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantName, restaurant }) {
+  // Controlled input states (DO NOT initialize on each render!)
   const [date, setDate] = useState(initialDetails.date || "");
   const [time, setTime] = useState(initialDetails.time || "");
   const [guests, setGuests] = useState(initialDetails.guests || 2);
@@ -24,6 +29,20 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
 
   // Error state: {field: "Error message"}
   const [errors, setErrors] = useState({});
+
+  // NOTE: Reset all field state when either the "modal opens" or "restaurant" changes,
+  // as indicated via initialDetails or restaurantName (or if a dedicated prop isOpen is available).
+  // To achieve this, useEffect should depend on those values.
+  useEffect(() => {
+    setDate(initialDetails.date || "");
+    setTime(initialDetails.time || "");
+    setGuests(initialDetails.guests || 2);
+    setContactName(initialDetails.contactName || "");
+    setContactEmail(initialDetails.contactEmail || "");
+    setContactPhone(initialDetails.contactPhone || "");
+    setErrors({});
+  // Use [initialDetails, restaurantName, restaurant] as dependencies. (restaurantName is often unique per open.)
+  }, [initialDetails, restaurantName, restaurant]);
 
   // PUBLIC_INTERFACE
   function validateFields() {
