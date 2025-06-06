@@ -12,7 +12,7 @@ function RestaurantDetails() {
   const navigate = useNavigate();
 
   // Restaurant IDs are numeric in sample
-  const restaurant = sampleRestaurants.find(
+  const restaurant = restaurants.find(
     (r) => String(r.id) === String(id)
   );
 
