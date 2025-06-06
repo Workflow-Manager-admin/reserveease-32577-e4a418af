@@ -8,6 +8,7 @@ import ConfirmationPage from './components/ConfirmationPage';
 import MyReservations from './components/MyReservations';
 import Modal from './components/Modal';
 import Navbar from './components/Navbar';
+import Favourites from './components/Favourites';
 import restaurants from './data/restaurants';
 
 /**
@@ -22,6 +23,30 @@ function App() {
 
   // In-memory state for reservations in current session
   const [reservations, setReservations] = useState([]);
+
+  // Favourites: store an array of restaurant ids (no persistence)
+  const [favourites, setFavourites] = useState([]);
+
+  // PUBLIC_INTERFACE
+  function isFavourite(restaurantId) {
+    return favourites.includes(restaurantId);
+  }
+  // PUBLIC_INTERFACE
+  function toggleFavourite(restaurantId) {
+    setFavourites((prev) =>
+      prev.includes(restaurantId)
+        ? prev.filter((id) => id !== restaurantId)
+        : [...prev, restaurantId]
+    );
+  }
+  // PUBLIC_INTERFACE
+  function setFavourite(restaurantId, value) {
+    setFavourites((prev) =>
+      value
+        ? [...prev.filter((id) => id !== restaurantId), restaurantId]
+        : prev.filter((id) => id !== restaurantId)
+    );
+  }
 
   // Track if editing (reservationId/null) and prefill
   const [editingReservationId, setEditingReservationId] = React.useState(null);
@@ -55,6 +80,9 @@ function App() {
 
   function AppWithNavigate() {
     const navigate = useNavigate();
+
+    // List of favourite restaurant objects
+    const favouriteRestaurants = restaurants.filter(r => favourites.includes(r.id));
 
     /**
      * Handles both adding a new reservation and editing an existing one.
