@@ -7,6 +7,7 @@ function RestaurantCard({
   onClickReserve, // Actually wired to app-level modal
   isFavourite,
   onToggleFavourite,
+  showAverageRating = false,
 }) {
   /**
    * Represents an individual restaurant card in the list.
@@ -72,6 +73,20 @@ function RestaurantCard({
         <div style={{ color: "var(--text-secondary)", fontSize: "1rem" }}>
           {restaurant.location} &bull; {restaurant.cuisine}
         </div>
+        {showAverageRating && typeof restaurant.averageRating === "number" && (
+          <div style={{ marginTop: 3, marginBottom: 2, display: "flex", alignItems: "center", gap: 6 }}>
+            <span style={{ color: "#FFC95B", fontSize: 19 }}>
+              {"★".repeat(Math.round(restaurant.averageRating)) +
+               "☆".repeat(5 - Math.round(restaurant.averageRating))}
+            </span>
+            <span style={{ color: "#FFC95B", fontSize: 15, fontWeight: 500, marginLeft: 2 }}>
+              {restaurant.averageRating.toFixed(1)}
+            </span>
+            <span style={{ color: "#bbb", fontSize: 13 }}>
+              ({(restaurant.reviews || []).length} review{(restaurant.reviews||[]).length === 1 ? "" : "s"})
+            </span>
+          </div>
+        )}
         <div style={{
           marginTop: 5,
           fontSize: "0.98rem",

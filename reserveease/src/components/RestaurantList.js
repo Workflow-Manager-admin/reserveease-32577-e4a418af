@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import RestaurantCard from "./RestaurantCard";
-import restaurants from "../data/restaurants"; // Import shared restaurant data
 
 /**
  * PUBLIC_INTERFACE
@@ -9,8 +8,9 @@ import restaurants from "../data/restaurants"; // Import shared restaurant data
  * Renders sample restaurants and provides stubs for card actions.
  * Props:
  *   - onReserve: function(restaurantId) to open modal (from app)
+ *   - restaurants: list of restaurant objects (with reviews/ratings)
  */
-function RestaurantList({ onReserve, isFavourite, onToggleFavourite }) {
+function RestaurantList({ onReserve, isFavourite, onToggleFavourite, restaurants }) {
   const navigate = useNavigate();
 
   // Navigate to the RestaurantDetails page using restaurant ID as a route parameter
@@ -53,6 +53,7 @@ function RestaurantList({ onReserve, isFavourite, onToggleFavourite }) {
           onClickReserve={handleClickReserve}
           isFavourite={isFavourite}
           onToggleFavourite={onToggleFavourite}
+          showAverageRating={true}
         />
       ))}
       <div style={{ height: 12 }} />
