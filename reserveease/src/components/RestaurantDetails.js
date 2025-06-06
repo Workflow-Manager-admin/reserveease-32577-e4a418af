@@ -8,7 +8,7 @@ import restaurants from "../data/restaurants"; // Import shared restaurant data
  * Props:
  *   - onReserve: function(restaurantId) (optional, for opening reservation modal)
  */
-function RestaurantDetails({ onReserve }) {
+function RestaurantDetails({ onReserve, isFavourite, onToggleFavourite }) {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -16,6 +16,8 @@ function RestaurantDetails({ onReserve }) {
   const restaurant = restaurants.find(
     (r) => String(r.id) === String(id)
   );
+
+  const fav = isFavourite ? isFavourite(restaurant?.id) : false;
 
   if (!restaurant) {
     return (
@@ -63,17 +65,39 @@ function RestaurantDetails({ onReserve }) {
           />
         </div>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "flex-start" }}>
-          <h2
-            style={{
-              color: "var(--primary)",
-              fontWeight: 700,
-              fontSize: "2.3rem",
-              margin: "0 0 8px 0",
-              lineHeight: 1.1,
-            }}
-          >
-            {restaurant.name}
-          </h2>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h2
+              style={{
+                color: "var(--primary)",
+                fontWeight: 700,
+                fontSize: "2.3rem",
+                margin: "0 0 8px 0",
+                lineHeight: 1.1,
+              }}
+            >
+              {restaurant.name}
+            </h2>
+            {onToggleFavourite && (
+              <button
+                aria-label={fav ? "Unfavourite" : "Favourite"}
+                title={fav ? "Remove from favourites" : "Add to favourites"}
+                style={{
+                  fontSize: 30,
+                  color: fav ? "var(--primary)" : "var(--text-secondary)",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  marginLeft: 12,
+                  outline: fav ? "2px solid var(--primary)" : "none"
+                }}
+                onClick={() => {
+                  onToggleFavourite(restaurant.id);
+                }}
+              >
+                {fav ? "⭐" : "☆"}
+              </button>
+            )}
+          </div>
           <div
             style={{
               color: "var(--text-secondary)",
