@@ -18,6 +18,7 @@ const restaurants = [
     image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=200&q=80",
     location: "Midtown",
     cuisine: "Italian",
+    price: "$$",
     description: "A cozy Italian spot with hand-made pasta.",
     reviews: [
       {
