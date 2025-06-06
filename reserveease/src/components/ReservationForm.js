@@ -3,16 +3,18 @@ import React, { useState, useEffect, useRef } from "react";
 /**
  * PUBLIC_INTERFACE
  * ReservationForm: Controlled form for making a reservation.
- * All fields are fully controlled via local state, and the state is only initialized/reset
- * when the modal is first opened or the restaurant changes. State is NOT reset on every render/
- * user edit, and all form fields are always editable. No useEffect or handler should ever cause repeated resets!
+ * This component ensures all inputs are editable, fully controlled from local state,
+ * and debuggable: all onChange handlers have console.log, and current input state is displayed.
  *
- * - All input values are controlled from local state.
- * - Fields are initialized on modal open or restaurant change.
- * - No field state is controlled by props or reset by a useEffect using field state as dependency.
+ * - NO input has 'disabled' or 'readOnly'
+ * - All value props are always set from local state
+ * - onChange handlers log their invocation and input
+ * - State is only reset when modal/restaurant context changes (never on every input)
+ * - Current state (including resetKey) is rendered at the bottom for live debugging
+ * - Any issue found with instant value reset due to parent effect or prop is logged and flagged
  */
 function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantName, restaurant }) {
-  // Reset key: only changes when restaurantId, modal open, or initialDetails change (NOT field values!)
+  // Compose a reset key based on context (restaurant/modal open)
   const resetKey = React.useMemo(
     () =>
       String(initialDetails.restaurantId ?? "") +
@@ -23,7 +25,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
     [initialDetails.restaurantId, restaurantName, restaurant?.id]
   );
 
-  // Local state for all fields. Initialized only when resetKey changes.
+  // --- Controlled input state for every form field ---
   const [date, setDate] = useState(initialDetails.date || "");
   const [time, setTime] = useState(initialDetails.time || "");
   const [guests, setGuests] = useState(
@@ -36,10 +38,10 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
   const [contactPhone, setContactPhone] = useState(initialDetails.contactPhone || "");
   const [errors, setErrors] = useState({});
 
-  // Ref for checking if first mount to avoid double-init
+  // For reset-on-modal-open only
   const didFirstInit = useRef(false);
 
-  // Reset form state ONLY on resetKey change (i.e., modal open/close, restaurant change).
+  // Only reset field state on context change, never after every keystroke
   useEffect(() => {
     setDate(initialDetails.date || "");
     setTime(initialDetails.time || "");
@@ -53,15 +55,13 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
     setContactPhone(initialDetails.contactPhone || "");
     setErrors({});
     didFirstInit.current = true;
-    // Debug: Show reset on modal/restaurant change
+    // Debug - log every resetKey-triggered reset
     // eslint-disable-next-line no-console
-    // console.log("[ReservationForm] Reset fields: date", initialDetails.date, "time", initialDetails.time, "guests", initialDetails.guests);
-    // eslint-disable-next-line
+    console.log("[ReservationForm] RESET: resetKey now", resetKey, initialDetails);
   }, [resetKey]);
 
   // PUBLIC_INTERFACE
   function validateFields() {
-    /** Validation stub—core checks only (expand as needed) */
     const next = {};
     if (!date) next.date = "Date is required";
     if (!time) next.time = "Time is required";
@@ -91,7 +91,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
     }
   }
 
-  // Controlled input handlers per field
+  // --- Instrumented onChange handlers for each input ---
   const handleDateChange = (e) => {
     console.log("[ReservationForm] date onChange", e.target.value);
     setDate(e.target.value);
@@ -117,6 +117,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
     setContactPhone(e.target.value);
   };
 
+  // --- Input elements: NO disabled/readOnly, only state value binding, all changes are debuggable ---
   return (
     <div
       style={{
@@ -157,6 +158,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             style={inputStyle(errors.date)}
             autoComplete="off"
             required
+            // NO disabled/readOnly
           />
           {errors.date && <div style={errorStyle}>{errors.date}</div>}
         </div>
@@ -263,18 +265,22 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
           )}
         </div>
       </form>
-      {/* Debug Only: Live state visualization */}
+      {/* LIVE DEBUG: Render current field state & resetKey at bottom */}
       <pre style={{
         background: "#222", color: "#2D9CDB", marginTop: 18, padding: 10, borderRadius: 6, fontSize: "1.01rem"
       }}>
-        {/* Display relevant field state for debugging */}
-        {JSON.stringify({date, time, guests, contactName, contactEmail, contactPhone, resetKey}, null, 2)}
+        {/* Display all input state for live debugging */}
+        {JSON.stringify(
+          { date, time, guests, contactName, contactEmail, contactPhone, resetKey },
+          null,
+          2
+        )}
       </pre>
     </div>
   );
 }
 
-// Internal style objects
+// --- Style objects (unchanged) ---
 const formGroupStyle = { display: "flex", flexDirection: "column" };
 const labelStyle = { color: "var(--text-secondary)", fontWeight: 500 };
 const inputStyle = (error) => ({
