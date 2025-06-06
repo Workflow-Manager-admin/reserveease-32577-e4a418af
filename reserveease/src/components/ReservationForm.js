@@ -1,83 +1,82 @@
 import React, { useState } from "react";
 
-// PUBLIC_INTERFACE
+/**
+ * PUBLIC_INTERFACE
+ * ReservationForm: Controlled form for making a reservation.
+ * Fields: Date, Time, Number of Guests, Contact Name, Contact Email/Phone
+ * - Validation stubs and basic error highlighting.
+ * - Dark theme consistent with ReserveEase (uses palette css vars).
+ * - "Submit" and "Cancel" actions.
+ * Props:
+ *   - onSubmit: (reservationData) => void
+ *   - onCancel: () => void (optional, for modal close)
+ *   - initialDetails: object (optional, for prefill)
+ *   - restaurantName: string (optional, heading)
+ */
 function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantName }) {
-  /**
-   * ReservationForm: Collect reservation details (date, time, guests, contact info).
-   * - Controlled (React state) form.
-   * - Styled for dark theme.
-   * - Validation stubs in place for client-side checks (not yet implemented).
-   * - Can be used in a modal or full-page route.
-   * 
-   * Props:
-   * - onSubmit: function(reservationData)
-   * - onCancel: function() | optional (for modal flow)
-   * - initialDetails: object | optional (prefill)
-   * - restaurantName: string | optional, display as heading
-   */
-
-  // Internal state for form fields.
+  // Controlled input states
   const [date, setDate] = useState(initialDetails.date || "");
   const [time, setTime] = useState(initialDetails.time || "");
   const [guests, setGuests] = useState(initialDetails.guests || 2);
   const [contactName, setContactName] = useState(initialDetails.contactName || "");
-  const [contactContact, setContactContact] = useState(initialDetails.contactContact || ""); // phone or email
+  const [contactEmail, setContactEmail] = useState(initialDetails.contactEmail || "");
+  const [contactPhone, setContactPhone] = useState(initialDetails.contactPhone || "");
 
-  // Validation state (placeholders for logic).
+  // Error state: {field: "Error message"}
   const [errors, setErrors] = useState({});
-
-  // Handlers
-  const handleChange = (setter) => (e) => setter(e.target.value);
 
   // PUBLIC_INTERFACE
   function validateFields() {
-    /** Placeholder for actual client-side validation */
-    // This will be filled with real checks (required fields, formats, etc.)
-    const nextErrors = {};
-    // Stub for required field checking
-    if (!date) nextErrors.date = "Date is required";
-    if (!time) nextErrors.time = "Time is required";
-    if (!guests || Number(guests) < 1) nextErrors.guests = "Number of guests required";
-    if (!contactName) nextErrors.contactName = "Contact name required";
-    if (!contactContact) nextErrors.contactContact = "Phone or email required";
-    // Add more sophisticated validation here as needed (formats, time slot rules, etc.)
-    setErrors(nextErrors);
-    return Object.keys(nextErrors).length === 0;
+    /** Validation stub—core checks only (expand as needed) */
+    const next = {};
+    if (!date) next.date = "Date is required";
+    if (!time) next.time = "Time is required";
+    if (!guests || Number(guests) < 1) next.guests = "Guests required";
+    if (!contactName) next.contactName = "Name is required";
+    if (!contactEmail && !contactPhone)
+      next.contactContact = "Email or phone required";
+    // (Add regex for email/phone, time slot checks etc. in real implementation)
+    setErrors(next);
+    return Object.keys(next).length === 0;
   }
 
   // PUBLIC_INTERFACE
   function handleFormSubmit(e) {
     e.preventDefault();
     if (validateFields()) {
-      // Compose reservation object
       const reservationData = {
         date,
         time,
         guests: Number(guests),
         contactName,
-        contactContact,
+        contactEmail,
+        contactPhone,
       };
       if (onSubmit) {
         onSubmit(reservationData);
       } else {
-        // Fallback: just log (for testing standalone)
+        // Standalone debug
         // eslint-disable-next-line no-console
         console.log("Reservation submitted:", reservationData);
       }
     }
   }
 
-  // Main form UI
+  // Input change handlers, all are controlled
+  const handleChange = (setter) => (e) => setter(e.target.value);
+
   return (
     <div
       style={{
         margin: "56px auto 0 auto",
-        maxWidth: 400,
-        background: "rgba(31,36,51,0.97)",
-        padding: "36px 30px 30px 30px",
+        maxWidth: 430,
+        background: "rgba(31,36,51,0.99)",
+        padding: "38px 30px 30px 30px",
         borderRadius: 16,
-        boxShadow: "0 4px 20px rgba(18,43,63,0.09)",
+        boxShadow: "0 4px 20px rgba(18,43,63,0.10)",
       }}
+      role="form"
+      aria-label="Reservation Form"
     >
       <h2
         style={{
@@ -86,32 +85,32 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
           fontWeight: 700,
           fontSize: "2rem",
           textAlign: "center",
+          marginBottom: 22,
         }}
       >
-        {restaurantName || "Reserve a Table"}
+        {restaurantName ?? "Reserve a Table"}
       </h2>
 
       <form onSubmit={handleFormSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         {/* Date */}
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label htmlFor="reservation-date" style={{ color: "var(--text-secondary)", fontWeight: 500 }}>
+        <div style={formGroupStyle}>
+          <label htmlFor="reservation-date" style={labelStyle}>
             Date <span style={{ color: "var(--accent)" }}>*</span>
           </label>
           <input
             id="reservation-date"
             type="date"
+            min={new Date().toISOString().split("T")[0]}
             value={date}
             onChange={handleChange(setDate)}
-            min={new Date().toISOString().split("T")[0]}
             style={inputStyle(errors.date)}
             autoComplete="off"
           />
           {errors.date && <div style={errorStyle}>{errors.date}</div>}
         </div>
-
         {/* Time */}
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label htmlFor="reservation-time" style={{ color: "var(--text-secondary)", fontWeight: 500 }}>
+        <div style={formGroupStyle}>
+          <label htmlFor="reservation-time" style={labelStyle}>
             Time <span style={{ color: "var(--accent)" }}>*</span>
           </label>
           <input
@@ -124,27 +123,25 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
           />
           {errors.time && <div style={errorStyle}>{errors.time}</div>}
         </div>
-
         {/* Guests */}
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label htmlFor="reservation-guests" style={{ color: "var(--text-secondary)", fontWeight: 500 }}>
+        <div style={formGroupStyle}>
+          <label htmlFor="reservation-guests" style={labelStyle}>
             Number of Guests <span style={{ color: "var(--accent)" }}>*</span>
           </label>
           <input
             id="reservation-guests"
             type="number"
             min={1}
-            max={30}
+            max={24}
             value={guests}
             onChange={handleChange(setGuests)}
             style={inputStyle(errors.guests)}
           />
           {errors.guests && <div style={errorStyle}>{errors.guests}</div>}
         </div>
-
         {/* Contact Name */}
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label htmlFor="reservation-name" style={{ color: "var(--text-secondary)", fontWeight: 500 }}>
+        <div style={formGroupStyle}>
+          <label htmlFor="reservation-name" style={labelStyle}>
             Contact Name <span style={{ color: "var(--accent)" }}>*</span>
           </label>
           <input
@@ -153,33 +150,46 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             value={contactName}
             onChange={handleChange(setContactName)}
             style={inputStyle(errors.contactName)}
-            placeholder="Your full name"
+            placeholder="Your name"
             autoComplete="name"
           />
           {errors.contactName && <div style={errorStyle}>{errors.contactName}</div>}
         </div>
-
-        {/* Contact Email or Phone */}
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label htmlFor="reservation-contact" style={{ color: "var(--text-secondary)", fontWeight: 500 }}>
-            Contact Phone or Email <span style={{ color: "var(--accent)" }}>*</span>
+        {/* Contact Email */}
+        <div style={formGroupStyle}>
+          <label htmlFor="reservation-email" style={labelStyle}>
+            Contact Email <span style={{ color: "var(--accent)" }}>*</span>
           </label>
           <input
-            id="reservation-contact"
-            type="text"
-            value={contactContact}
-            onChange={handleChange(setContactContact)}
+            id="reservation-email"
+            type="email"
+            value={contactEmail}
+            onChange={handleChange(setContactEmail)}
             style={inputStyle(errors.contactContact)}
-            placeholder="Email or phone number"
+            placeholder="Email (or use phone below)"
             autoComplete="email"
+          />
+        </div>
+        {/* Contact Phone */}
+        <div style={formGroupStyle}>
+          <label htmlFor="reservation-phone" style={labelStyle}>
+            Contact Phone <span style={{ color: "var(--accent)" }}>*</span>
+          </label>
+          <input
+            id="reservation-phone"
+            type="tel"
+            value={contactPhone}
+            onChange={handleChange(setContactPhone)}
+            style={inputStyle(errors.contactContact)}
+            placeholder="Phone (or use email above)"
+            autoComplete="tel"
           />
           {errors.contactContact && <div style={errorStyle}>{errors.contactContact}</div>}
         </div>
-
-        {/* Action buttons */}
+        {/* Buttons */}
         <div style={{ display: "flex", gap: 14, marginTop: 8, justifyContent: "center" }}>
           <button type="submit" className="btn btn-large" style={{ minWidth: 110 }}>
-            Submit
+            Reserve
           </button>
           {onCancel && (
             <button
@@ -202,7 +212,9 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
   );
 }
 
-// Internal styling helpers
+// Internal style objects
+const formGroupStyle = { display: "flex", flexDirection: "column" };
+const labelStyle = { color: "var(--text-secondary)", fontWeight: 500 };
 const inputStyle = (error) => ({
   marginTop: 4,
   padding: "10px 14px",
@@ -216,7 +228,6 @@ const inputStyle = (error) => ({
   boxShadow: "none",
   marginBottom: 2,
 });
-
 const errorStyle = {
   color: "var(--accent)",
   fontSize: "0.97rem",
