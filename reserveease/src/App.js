@@ -305,6 +305,18 @@ function App() {
                 element={
                   <RestaurantList
                     onReserve={openReservationModal}
+                    isFavourite={isFavourite}
+                    onToggleFavourite={toggleFavourite}
+                  />
+                }
+              />
+              <Route
+                path="/favourites"
+                element={
+                  <Favourites
+                    favourites={favouriteRestaurants}
+                    onReserve={openReservationModal}
+                    onUnfavourite={toggleFavourite}
                   />
                 }
               />
@@ -313,6 +325,8 @@ function App() {
                 element={
                   <RestaurantDetails
                     onReserve={openReservationModal}
+                    isFavourite={isFavourite}
+                    onToggleFavourite={toggleFavourite}
                   />
                 }
               />
@@ -350,7 +364,9 @@ function App() {
   return (
     <Router>
       <div className="app">
-        <Navbar />
+        <Navbar
+          favouritesCount={favourites.length}
+        />
         <AppWithNavigate />
       </div>
     </Router>
