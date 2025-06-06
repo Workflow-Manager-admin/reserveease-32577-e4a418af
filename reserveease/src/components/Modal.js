@@ -29,6 +29,7 @@ function Modal({ isOpen, children, onClose }) {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        overflow: "hidden", // prevent double scrollbars and background scroll
       }}
       role="dialog"
       aria-modal="true"
@@ -43,8 +44,15 @@ function Modal({ isOpen, children, onClose }) {
           minHeight: 120,
           position: "relative",
           boxShadow: "0 8px 48px rgba(18,43,63,0.18)",
+          maxHeight: "85vh",
+          maxWidth: "98vw",
+          overflowY: "auto", // Allow modal content to scroll within the modal if too tall
+          overflowX: "visible",
+          display: "flex",
+          flexDirection: "column"
         }}
         onClick={e => e.stopPropagation()} // Prevent inside clicks from propagating to overlay
+        tabIndex={-1}
       >
         <button
           onClick={onClose}
@@ -59,12 +67,21 @@ function Modal({ isOpen, children, onClose }) {
             cursor: "pointer",
             opacity: 0.75,
             transition: "opacity .15s",
+            zIndex: 2,
           }}
           aria-label="Close modal"
         >
           ×
         </button>
-        <div>{children}</div>
+        {/* Wrapping children in a scrollable area in case content overflows, especially the form */}
+        <div style={{
+          overflowY: "auto",
+          overflowX: "visible",
+          flex: 1, 
+          minHeight: 0, // enable scrolling of flex children
+        }}>
+          {children}
+        </div>
       </div>
     </div>
   );
