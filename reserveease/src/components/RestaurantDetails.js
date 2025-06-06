@@ -1,23 +1,27 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import restaurants from "../data/restaurants"; // Import shared restaurant data
 
 /**
  * PUBLIC_INTERFACE
  * RestaurantDetails: Shows detailed info for a restaurant and Reserve button (opens modal via prop).
  * Props:
  *   - onReserve: function(restaurantId) (optional, for opening reservation modal)
+ *   - restaurants: array of all restaurant objects (with reviews/avg)
  */
-function RestaurantDetails({ onReserve, isFavourite, onToggleFavourite }) {
+function RestaurantDetails({ onReserve, isFavourite, onToggleFavourite, restaurants }) {
   const { id } = useParams();
   const navigate = useNavigate();
 
   // Restaurant IDs are numeric in sample
-  const restaurant = restaurants.find(
+  const restaurant = (restaurants || []).find(
     (r) => String(r.id) === String(id)
   );
 
   const fav = isFavourite ? isFavourite(restaurant?.id) : false;
+
+  // Extract reviews and average rating
+  const reviews = restaurant?.reviews || [];
+  const avg = typeof restaurant?.averageRating === "number" ? restaurant.averageRating : null;
 
   if (!restaurant) {
     return (
@@ -108,6 +112,19 @@ function RestaurantDetails({ onReserve, isFavourite, onToggleFavourite }) {
           >
             {restaurant.location} &bull; {restaurant.cuisine}
           </div>
+          {typeof avg === "number" && (
+            <div style={{ margin: "1px 0 8px 0", display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ color: "#FFC95B", fontSize: 21 }}>
+                {"★".repeat(Math.round(avg)) + "☆".repeat(5 - Math.round(avg))}
+              </span>
+              <span style={{ color: "#FFC95B", fontSize: 17, fontWeight: 600 }}>
+                {avg.toFixed(1)}
+              </span>
+              <span style={{ color: "#aaa", fontSize: 14 }}>
+                ({reviews.length} review{reviews.length === 1 ? "" : "s"})
+              </span>
+            </div>
+          )}
           {/* Map view removed */}
           <div
             style={{
@@ -145,6 +162,60 @@ function RestaurantDetails({ onReserve, isFavourite, onToggleFavourite }) {
             >
               Back
             </button>
+          </div>
+          {/* Display all reviews for this restaurant */}
+          <div style={{ marginTop: 32 }}>
+            <h3 style={{
+              color: "var(--primary)",
+              fontSize: "1.22rem",
+              fontWeight: 600,
+              margin: "0 0 12px 0"
+            }}>
+              Reviews
+            </h3>
+            {reviews.length === 0 ? (
+              <div style={{ color: "var(--text-secondary)", marginBottom: 16, fontSize: "1.06rem" }}>
+                No reviews yet. Be the first to review after your reservation!
+              </div>
+            ) : (
+              <div style={{
+                display: "flex", flexDirection: "column", gap: 15, marginBottom: 12
+              }}>
+                {reviews.slice().reverse().map(r => (
+                  <div
+                    key={r.id}
+                    style={{
+                      background: "rgba(255,255,255,0.06)",
+                      border: "1px solid var(--border-color)",
+                      borderRadius: 9,
+                      padding: "12px 15px 8px 15px",
+                      fontSize: "1.03rem",
+                      color: "#fff"
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
+                      <span style={{ fontWeight: 500, color: "#FFC95B", fontSize: 19 }}>
+                        {"★".repeat(r.rating) + "☆".repeat(5 - r.rating)}
+                      </span>
+                      <span style={{ color: "#FFC95B", fontSize: 15, fontWeight: 600 }}>
+                        {r.rating}/5
+                      </span>
+                      <span style={{ color: "#55CDF6", marginLeft: 6, fontWeight: 500 }}>
+                        {r.reviewerName || "Guest"}
+                      </span>
+                      <span style={{ color: "#aaa", marginLeft: 12, fontSize: "0.96em" }}>
+                        {new Date(r.date).toLocaleDateString()}
+                      </span>
+                    </div>
+                    {r.text && (
+                      <div style={{ marginTop: 4, color: "#eee", fontSize: "1.04rem" }}>
+                        {r.text}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
