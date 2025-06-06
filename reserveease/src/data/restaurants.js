@@ -12,6 +12,8 @@ const restaurants = [
     location: "Midtown",
     cuisine: "Italian",
     description: "A cozy Italian spot with hand-made pasta.",
+    reviews: [],
+    averageRating: null, // Number or null
   },
   {
     id: 2,
@@ -20,6 +22,8 @@ const restaurants = [
     location: "Downtown",
     cuisine: "Indian",
     description: "Spicy, authentic curries in a warm setting.",
+    reviews: [],
+    averageRating: null,
   },
   {
     id: 3,
@@ -28,6 +32,8 @@ const restaurants = [
     location: "Uptown",
     cuisine: "Japanese",
     description: "Fresh sushi and sashimi with modern flair.",
+    reviews: [],
+    averageRating: null,
   },
   {
     id: 4,
@@ -36,6 +42,8 @@ const restaurants = [
     location: "West End",
     cuisine: "American",
     description: "Juicy burgers, shakes, and fries for all.",
+    reviews: [],
+    averageRating: null,
   },
   {
     id: 5,
@@ -44,6 +52,8 @@ const restaurants = [
     location: "South Park",
     cuisine: "Vegetarian",
     description: "Organic vegetarian & vegan delights.",
+    reviews: [],
+    averageRating: null,
   },
 ];
 
