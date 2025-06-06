@@ -137,7 +137,40 @@ function App() {
 
     // PUBLIC_INTERFACE -- Cancel reservation
     function handleCancelReservation(reservationId) {
-      setReservations((prev) => prev.filter((r) => r.id !== reservationId));
+      try {
+        /* Verbose debug: Log all relevant steps and types */
+        console.log('[App.handleCancelReservation] Called with id:', reservationId, 'type:', typeof reservationId);
+
+        // Defensive: ensure prior state is logged and compared string-wise
+        setReservations((prev) => {
+          console.log('[App.handleCancelReservation] Prev reservations:', JSON.stringify(prev, null, 2));
+          
+          // Safeguard: check for both strict and string equality, log findings
+          const filtered = prev.filter((r) => {
+            const eqStrict = r.id === reservationId;
+            const eqStr = String(r.id) === String(reservationId);
+            if (eqStr && !eqStrict) {
+              console.warn('[App.handleCancelReservation] Id matches by string equality but not strict. Reservation:', r);
+            }
+            if (eqStrict) {
+              console.log('[App.handleCancelReservation] Match by strict equality:', r.id, reservationId);
+            }
+            if (eqStr) {
+              console.log('[App.handleCancelReservation] Match by string equality:', r.id, reservationId);
+            }
+            return !eqStr; // Remove if string IDs match
+          });
+
+          console.log('[App.handleCancelReservation] Filtered reservations (after removal):', JSON.stringify(filtered, null, 2));
+          if (filtered.length === prev.length) {
+            console.warn('[App.handleCancelReservation] Warning: No reservation was removed! Ids present:', prev.map((r) => r.id));
+          }
+          console.log('[App.handleCancelReservation] setReservations will be invoked now');
+          return filtered;
+        });
+      } catch (err) {
+        console.error('[App.handleCancelReservation] Error during cancellation:', err);
+      }
     }
 
     // PUBLIC_INTERFACE -- Edit reservation: open modal prefilled

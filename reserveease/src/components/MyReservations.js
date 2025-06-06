@@ -27,12 +27,25 @@ function MyReservations({
 
   // Render confirmation dialog (browser built-in for simplicity)
   function handleCancel(res) {
+    // Verbose logging: print the reservation to be cancelled with id and type
+    console.log('[MyReservations.handleCancel] Attempting to cancel reservation object:', res, 'id:', res.id, 'type:', typeof res.id);
     if (
       window.confirm(
         `Cancel your reservation at "${res.restaurantName}" on ${res.date} at ${res.time}?`
       )
     ) {
-      onCancelReservation && onCancelReservation(res.id);
+      // Log before passing up to parent
+      if (!res.id) {
+        console.warn('[MyReservations.handleCancel] Reservation has no id:', res);
+      }
+      // Debug: check parent's existence/type, and log reservations before/after for this click
+      if (onCancelReservation) {
+        onCancelReservation(res.id);
+        // No local reservations update here; parent is responsible. UI will update after App updates state.
+        // If cancellation does not work, parent-level logs (added in App.js) will surface the cause.
+      } else {
+        console.warn('[MyReservations.handleCancel] onCancelReservation prop not defined.');
+      }
     }
   }
 
