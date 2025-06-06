@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 
 /**
  * PUBLIC_INTERFACE
@@ -13,36 +13,53 @@ import React, { useState, useEffect } from "react";
  *   - initialDetails: object (optional, for prefill)
  *   - restaurantName: string (optional, heading)
  *   - restaurant: object (full restaurant data if provided)
- * 
- * The state for all input fields is initialized and reset ONLY when the modal opens
- * (as reflected by a change in the initialDetails prop, which resets on restaurant/modal state change),
- * not on every render. All input fields are fully controlled.
+ *
+ * Form field state is initialized ONLY when modal opens (detected by a change in restaurant/initialDetails)
+ * and remains user-editable. No re-initialization/reset occurs on each user edit or render.
+ * All fields are always controlled only by local state and per-input handlers.
  */
 function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantName, restaurant }) {
-  // Controlled input states (DO NOT initialize on each render!)
+  // Track last restaurantId/modal key to detect when modal opens (or restaurant changes)
+  const lastResetKey = useRef("");
+  // Determine effective key for modal reopen or new restaurant/modal
+  const resetKey =
+    String(initialDetails.restaurantId ?? "") +
+    "|" +
+    String(restaurantName ?? "") +
+    "|" +
+    String(restaurant?.id ?? "");
+
+  // Controlled field states (always used for value/onChange)
   const [date, setDate] = useState(initialDetails.date || "");
   const [time, setTime] = useState(initialDetails.time || "");
   const [guests, setGuests] = useState(initialDetails.guests || 2);
   const [contactName, setContactName] = useState(initialDetails.contactName || "");
   const [contactEmail, setContactEmail] = useState(initialDetails.contactEmail || "");
   const [contactPhone, setContactPhone] = useState(initialDetails.contactPhone || "");
-
-  // Error state: {field: "Error message"}
   const [errors, setErrors] = useState({});
 
-  // NOTE: Reset all field state when either the "modal opens" or "restaurant" changes,
-  // as indicated via initialDetails or restaurantName (or if a dedicated prop isOpen is available).
-  // To achieve this, useEffect should depend on those values.
-  useEffect(() => {
-    setDate(initialDetails.date || "");
-    setTime(initialDetails.time || "");
-    setGuests(initialDetails.guests || 2);
-    setContactName(initialDetails.contactName || "");
-    setContactEmail(initialDetails.contactEmail || "");
-    setContactPhone(initialDetails.contactPhone || "");
+  // Imperatively reset field state ONLY when modal is opened again (or restaurant changes)
+  if (lastResetKey.current !== resetKey) {
+    lastResetKey.current = resetKey;
+    // Do not reset on every render/user edit - only upon this modal context change
+    // Use initialDetails/restaurantName only for initial fill
+    if (initialDetails) {
+      setDate(initialDetails.date || "");
+      setTime(initialDetails.time || "");
+      setGuests(initialDetails.guests || 2);
+      setContactName(initialDetails.contactName || "");
+      setContactEmail(initialDetails.contactEmail || "");
+      setContactPhone(initialDetails.contactPhone || "");
+    } else {
+      setDate("");
+      setTime("");
+      setGuests(2);
+      setContactName("");
+      setContactEmail("");
+      setContactPhone("");
+    }
     setErrors({});
-  // Use [initialDetails, restaurantName, restaurant] as dependencies. (restaurantName is often unique per open.)
-  }, [initialDetails, restaurantName, restaurant]);
+  }
 
   // PUBLIC_INTERFACE
   function validateFields() {
@@ -52,9 +69,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
     if (!time) next.time = "Time is required";
     if (!guests || Number(guests) < 1) next.guests = "Guests required";
     if (!contactName) next.contactName = "Name is required";
-    if (!contactEmail && !contactPhone)
-      next.contactContact = "Email or phone required";
-    // (Add regex for email/phone, time slot checks etc. in real implementation)
+    if (!contactEmail && !contactPhone) next.contactContact = "Email or phone required";
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -75,15 +90,20 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
       if (onSubmit) {
         onSubmit(reservationData);
       } else {
-        // Standalone debug
+        // Debug fallback log
         // eslint-disable-next-line no-console
         console.log("Reservation submitted:", reservationData);
       }
     }
   }
 
-  // Input change handlers, all are controlled
-  const handleChange = (setter) => (e) => setter(e.target.value);
+  // Controlled input handlers per field
+  const handleDateChange = (e) => setDate(e.target.value);
+  const handleTimeChange = (e) => setTime(e.target.value);
+  const handleGuestsChange = (e) => setGuests(e.target.value);
+  const handleContactNameChange = (e) => setContactName(e.target.value);
+  const handleContactEmailChange = (e) => setContactEmail(e.target.value);
+  const handleContactPhoneChange = (e) => setContactPhone(e.target.value);
 
   return (
     <div
@@ -122,7 +142,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             type="date"
             min={new Date().toISOString().split("T")[0]}
             value={date}
-            onChange={handleChange(setDate)}
+            onChange={handleDateChange}
             style={inputStyle(errors.date)}
             autoComplete="off"
           />
@@ -137,7 +157,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             id="reservation-time"
             type="time"
             value={time}
-            onChange={handleChange(setTime)}
+            onChange={handleTimeChange}
             style={inputStyle(errors.time)}
             autoComplete="off"
           />
@@ -154,7 +174,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             min={1}
             max={24}
             value={guests}
-            onChange={handleChange(setGuests)}
+            onChange={handleGuestsChange}
             style={inputStyle(errors.guests)}
           />
           {errors.guests && <div style={errorStyle}>{errors.guests}</div>}
@@ -168,7 +188,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             id="reservation-name"
             type="text"
             value={contactName}
-            onChange={handleChange(setContactName)}
+            onChange={handleContactNameChange}
             style={inputStyle(errors.contactName)}
             placeholder="Your name"
             autoComplete="name"
@@ -184,7 +204,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             id="reservation-email"
             type="email"
             value={contactEmail}
-            onChange={handleChange(setContactEmail)}
+            onChange={handleContactEmailChange}
             style={inputStyle(errors.contactContact)}
             placeholder="Email (or use phone below)"
             autoComplete="email"
@@ -199,7 +219,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
             id="reservation-phone"
             type="tel"
             value={contactPhone}
-            onChange={handleChange(setContactPhone)}
+            onChange={handleContactPhoneChange}
             style={inputStyle(errors.contactContact)}
             placeholder="Phone (or use email above)"
             autoComplete="tel"
