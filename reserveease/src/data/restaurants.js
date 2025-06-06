@@ -124,6 +124,7 @@ const restaurants = [
     image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=200&q=80",
     location: "West End",
     cuisine: "American",
+    price: "$",
     description: "Juicy burgers, shakes, and fries for all.",
     reviews: [
       {
@@ -156,6 +157,7 @@ const restaurants = [
     image: "https://images.unsplash.com/photo-1432139555190-58524dae6a55?auto=format&fit=crop&w=200&q=80",
     location: "South Park",
     cuisine: "Vegetarian",
+    price: "$$",
     description: "Organic vegetarian & vegan delights.",
     reviews: [
       {
