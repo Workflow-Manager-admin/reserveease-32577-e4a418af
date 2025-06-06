@@ -180,7 +180,11 @@ function App() {
               <Route
                 path="/my-reservations"
                 element={
-                  <MyReservations reservations={reservations} />
+                  <MyReservations
+                    reservations={reservations}
+                    onEditReservation={handleEditReservation}
+                    onCancelReservation={handleCancelReservation}
+                  />
                 }
               />
             </Routes>
