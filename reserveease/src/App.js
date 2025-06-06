@@ -43,8 +43,9 @@ function App() {
     <Modal isOpen={modalOpen} onClose={closeReservationModal}>
       {currentRestaurant && (
         <ReservationForm
-          initialDetails={{}}
+          initialDetails={{ restaurantId: currentRestaurant.id }}
           restaurantName={currentRestaurant.name}
+          restaurant={currentRestaurant}
           onSubmit={() => {
             // We'll handle real submission logic (saving, confirmation) in subsequent tasks.
             closeReservationModal();
