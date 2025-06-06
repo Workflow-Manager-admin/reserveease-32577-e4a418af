@@ -77,6 +77,8 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
     if (!guests || Number(guests) < 1) next.guests = "Guests required";
     if (!contactName) next.contactName = "Name is required";
     if (!contactEmail && !contactPhone) next.contactContact = "Email or phone required";
+    if (!tableArea) next.tableArea = "Table area required";
+    if (windowSeat === "") next.windowSeat = "Window seat preference required";
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -93,6 +95,10 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
         contactName,
         contactEmail,
         contactPhone,
+        // new fields:
+        tableArea,
+        windowSeat,
+        specialRequest,
       };
       if (onSubmit) {
         onSubmit(reservationData);
