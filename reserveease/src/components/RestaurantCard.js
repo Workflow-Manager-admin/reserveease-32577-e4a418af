@@ -4,7 +4,7 @@ import React from "react";
 function RestaurantCard({
   restaurant,
   onOpenDetails,
-  onClickReserve,
+  onClickReserve, // Actually wired to app-level modal
 }) {
   /**
    * Represents an individual restaurant card in the list.
@@ -85,7 +85,7 @@ function RestaurantCard({
           tabIndex={0}
           onClick={e => {
             e.stopPropagation(); // Prevent parent click (open details)
-            onClickReserve(restaurant.id);
+            if (onClickReserve) onClickReserve(restaurant.id);
           }}
         >
           Reserve
