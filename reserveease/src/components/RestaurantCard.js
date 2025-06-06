@@ -5,6 +5,8 @@ function RestaurantCard({
   restaurant,
   onOpenDetails,
   onClickReserve, // Actually wired to app-level modal
+  isFavourite,
+  onToggleFavourite,
 }) {
   /**
    * Represents an individual restaurant card in the list.
@@ -14,7 +16,11 @@ function RestaurantCard({
    * - restaurant: { id, name, image, location, cuisine, description }
    * - onOpenDetails: function(restaurantId)
    * - onClickReserve: function(restaurantId)
+   * - isFavourite: function(restaurantId) => boolean
+   * - onToggleFavourite: function(restaurantId)
    */
+  const fav = isFavourite ? isFavourite(restaurant.id) : false;
+
   return (
     <div
       className="restaurant-card"
@@ -78,10 +84,34 @@ function RestaurantCard({
           {restaurant.description}
         </div>
       </div>
-      <div style={{ marginLeft: "auto", display: "flex" }}>
+      <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 8 }}>
+        {/* Favourite Toggle Button */}
+        {onToggleFavourite && (
+          <button
+            tabIndex={0}
+            aria-label={fav ? "Unfavourite" : "Favourite"}
+            title={fav ? "Remove from favourites" : "Add to favourites"}
+            style={{
+              fontSize: 26,
+              color: fav ? "var(--primary)" : "var(--text-secondary)",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              marginRight: 6,
+              outline: fav ? "2px solid var(--primary)" : "none",
+              transition: "color .2s"
+            }}
+            onClick={e => {
+              e.stopPropagation();
+              onToggleFavourite(restaurant.id);
+            }}
+          >
+            {fav ? "⭐" : "☆"}
+          </button>
+        )}
         <button
           className="btn"
-          style={{ marginLeft: 16, minWidth: 92 }}
+          style={{ marginLeft: 10, minWidth: 92 }}
           tabIndex={0}
           onClick={e => {
             e.stopPropagation(); // Prevent parent click (open details)
