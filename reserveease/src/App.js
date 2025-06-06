@@ -138,34 +138,81 @@ function App() {
     // PUBLIC_INTERFACE -- Cancel reservation
     function handleCancelReservation(reservationId) {
       try {
-        /* Verbose debug: Log all relevant steps and types */
-        console.log('[App.handleCancelReservation] Called with id:', reservationId, 'type:', typeof reservationId);
-
-        // Defensive: ensure prior state is logged and compared string-wise
+        // Step 1: Log invocation and type.
+        console.log(
+          '[App.handleCancelReservation] CALLED!',
+          '\n  reservationId:', reservationId, '(typeof:', typeof reservationId + ')'
+        );
+        // Step 2: Log full state before update, with both string/strict matching for all ids.
         setReservations((prev) => {
-          console.log('[App.handleCancelReservation] Prev reservations:', JSON.stringify(prev, null, 2));
-          
-          // Safeguard: check for both strict and string equality, log findings
-          const filtered = prev.filter((r) => {
-            const eqStrict = r.id === reservationId;
-            const eqStr = String(r.id) === String(reservationId);
-            if (eqStr && !eqStrict) {
-              console.warn('[App.handleCancelReservation] Id matches by string equality but not strict. Reservation:', r);
+          console.log('[App.handleCancelReservation] PREVIOUS STATE (full):', JSON.stringify(prev, null, 2));
+          const idsList = prev.map((r) => r.id + ' (typeof ' + typeof r.id + ')');
+          console.log('[App.handleCancelReservation] ALL RESERVATION IDS:', idsList);
+
+          // Step 3: Log per-reservation, which ids match by string/strict equality.
+          const matches = prev.map((r, idx) => {
+            const matchStrict = r.id === reservationId;
+            const matchString = String(r.id) === String(reservationId);
+            if (matchStrict) {
+              console.log(
+                `[App.handleCancelReservation] #${idx}: STRICT id match for`, r.id, '(typeof', typeof r.id + ')'
+              );
             }
-            if (eqStrict) {
-              console.log('[App.handleCancelReservation] Match by strict equality:', r.id, reservationId);
+            if (matchString) {
+              console.log(
+                `[App.handleCancelReservation] #${idx}: STRING id match for`, r.id, '(typeof', typeof r.id + ')'
+              );
             }
-            if (eqStr) {
-              console.log('[App.handleCancelReservation] Match by string equality:', r.id, reservationId);
+            return { matchStrict, matchString };
+          });
+          const matchCount = matches.filter(m => m.matchString).length;
+          console.log('[App.handleCancelReservation] RESERVATIONS with id == (string):', matchCount);
+
+          // Step 4: Build new filtered state, logging for each
+          const filtered = prev.filter((r, idx) => {
+            const idMatch = String(r.id) === String(reservationId);
+            if (idMatch) {
+              console.log(
+                `[App.handleCancelReservation] Removing reservation idx`, idx,
+                'id:', r.id, '(typeof', typeof r.id + ') for match with:', reservationId, '(typeof', typeof reservationId + ')'
+              );
             }
-            return !eqStr; // Remove if string IDs match
+            return !idMatch;
           });
 
-          console.log('[App.handleCancelReservation] Filtered reservations (after removal):', JSON.stringify(filtered, null, 2));
+          // Step 5: Log result and before/after ids
+          const filteredIds = filtered.map(r => r.id);
+          console.log(
+            '[App.handleCancelReservation] FILTERED STATE after removal. Remaining IDs:', filteredIds,
+            '\n Full filtered:', JSON.stringify(filtered, null, 2)
+          );
           if (filtered.length === prev.length) {
-            console.warn('[App.handleCancelReservation] Warning: No reservation was removed! Ids present:', prev.map((r) => r.id));
+            // None were removed
+            console.warn(
+              '[App.handleCancelReservation] No reservation was removed! Searched for id:',
+              reservationId,
+              '\nExisting ids:', idsList,
+              '\nMatch counts:', matches
+            );
+            // Additional diagnostic: dump match for object reference
+            const matchingObj = prev.find(r => r === reservationId);
+            if (matchingObj) {
+              console.warn(
+                '[App.handleCancelReservation] Found reservation via object reference equality, not id value!',
+                matchingObj
+              );
+            }
+            if (matchCount === 0) {
+              // The logic failed to match any. Check UI block/hydration issues.
+              console.warn('[App.handleCancelReservation] No string id match found at all: data-type or render error?');
+            }
+          } else {
+            console.log(
+              '[App.handleCancelReservation] A reservation WAS removed. New count:', filtered.length
+            );
           }
-          console.log('[App.handleCancelReservation] setReservations will be invoked now');
+
+          console.log('[App.handleCancelReservation] setReservations() will now return the filtered state.');
           return filtered;
         });
       } catch (err) {
