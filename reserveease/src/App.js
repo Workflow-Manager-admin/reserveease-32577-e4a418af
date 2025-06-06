@@ -73,6 +73,7 @@ function App() {
           restaurantId,
           restaurantName: restaurant.name,
           id: editingReservationId,
+          contactName: formData.contactName || formData.contact || prev.contactName || "",
         };
         setReservations((prevArr) =>
           prevArr.map((r) => (r.id === editingReservationId ? reservation : r))
@@ -90,7 +91,9 @@ function App() {
           id: generateReservationId(),
           restaurantId,
           restaurantName: restaurant.name,
+          // Always store contactName, regardless of the form field's property name
           ...formData,
+          contactName: formData.contactName || formData.contact || "",
         };
         setReservations((prev) => [...prev, reservation]);
       }
