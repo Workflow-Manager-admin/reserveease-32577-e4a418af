@@ -19,9 +19,11 @@ function RestaurantDetails({ onReserve, isFavourite, onToggleFavourite, restaura
 
   const fav = isFavourite ? isFavourite(restaurant?.id) : false;
 
-  // Extract reviews and average rating
+  // Compute reviews and average rating live to reflect newly submitted reviews
   const reviews = restaurant?.reviews || [];
-  const avg = typeof restaurant?.averageRating === "number" ? restaurant.averageRating : null;
+  const avg = reviews.length > 0
+    ? Math.round((reviews.reduce((sum, r) => sum + (parseInt(r.rating || 0, 10)), 0) / reviews.length) * 10) / 10
+    : null;
 
   if (!restaurant) {
     return (
@@ -115,7 +117,13 @@ function RestaurantDetails({ onReserve, isFavourite, onToggleFavourite, restaura
           {typeof avg === "number" && (
             <div style={{ margin: "1px 0 8px 0", display: "flex", alignItems: "center", gap: 8 }}>
               <span style={{ color: "#FFC95B", fontSize: 21 }}>
-                {"★".repeat(Math.round(avg)) + "☆".repeat(5 - Math.round(avg))}
+                {
+                  [...Array(5)].map((_, i) => {
+                    if (i < Math.floor(avg)) return <span key={"f" + i}>★</span>;
+                    if (i < avg) return <span key={"h" + i} style={{ opacity: 0.5 }}>★</span>;
+                    return <span key={"e" + i}>☆</span>;
+                  })
+                }
               </span>
               <span style={{ color: "#FFC95B", fontSize: 17, fontWeight: 600 }}>
                 {avg.toFixed(1)}
