@@ -92,12 +92,30 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
   }
 
   // Controlled input handlers per field
-  const handleDateChange = (e) => setDate(e.target.value);
-  const handleTimeChange = (e) => setTime(e.target.value);
-  const handleGuestsChange = (e) => setGuests(e.target.value);
-  const handleContactNameChange = (e) => setContactName(e.target.value);
-  const handleContactEmailChange = (e) => setContactEmail(e.target.value);
-  const handleContactPhoneChange = (e) => setContactPhone(e.target.value);
+  const handleDateChange = (e) => {
+    console.log("[ReservationForm] date onChange", e.target.value);
+    setDate(e.target.value);
+  };
+  const handleTimeChange = (e) => {
+    console.log("[ReservationForm] time onChange", e.target.value);
+    setTime(e.target.value);
+  };
+  const handleGuestsChange = (e) => {
+    console.log("[ReservationForm] guests onChange", e.target.value);
+    setGuests(e.target.value);
+  };
+  const handleContactNameChange = (e) => {
+    console.log("[ReservationForm] contactName onChange", e.target.value);
+    setContactName(e.target.value);
+  };
+  const handleContactEmailChange = (e) => {
+    console.log("[ReservationForm] contactEmail onChange", e.target.value);
+    setContactEmail(e.target.value);
+  };
+  const handleContactPhoneChange = (e) => {
+    console.log("[ReservationForm] contactPhone onChange", e.target.value);
+    setContactPhone(e.target.value);
+  };
 
   return (
     <div
@@ -245,6 +263,13 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
           )}
         </div>
       </form>
+      {/* Debug Only: Live state visualization */}
+      <pre style={{
+        background: "#222", color: "#2D9CDB", marginTop: 18, padding: 10, borderRadius: 6, fontSize: "1.01rem"
+      }}>
+        {/* Display relevant field state for debugging */}
+        {JSON.stringify({date, time, guests, contactName, contactEmail, contactPhone, resetKey}, null, 2)}
+      </pre>
     </div>
   );
 }
