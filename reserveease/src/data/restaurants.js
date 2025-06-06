@@ -51,6 +51,7 @@ const restaurants = [
     image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=200&q=80",
     location: "Downtown",
     cuisine: "Indian",
+    price: "$$",
     description: "Spicy, authentic curries in a warm setting.",
     reviews: [
       {
@@ -83,6 +84,7 @@ const restaurants = [
     image: "https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=200&q=80",
     location: "Uptown",
     cuisine: "Japanese",
+    price: "$$$",
     description: "Fresh sushi and sashimi with modern flair.",
     reviews: [
       {
