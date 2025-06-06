@@ -1,35 +1,29 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 /**
  * PUBLIC_INTERFACE
  * ReservationForm: Controlled form for making a reservation.
- * Fields: Date, Time, Number of Guests, Contact Name, Contact Email/Phone
- * - Validation stubs and basic error highlighting.
- * - Dark theme consistent with ReserveEase (uses palette css vars).
- * - "Submit" and "Cancel" actions.
- * Props:
- *   - onSubmit: (reservationData) => void
- *   - onCancel: () => void (optional, for modal close)
- *   - initialDetails: object (optional, for prefill)
- *   - restaurantName: string (optional, heading)
- *   - restaurant: object (full restaurant data if provided)
+ * All fields are fully controlled via local state, and the state is only initialized/reset
+ * when the modal is first opened or the restaurant changes. State is NOT reset on every render/
+ * user edit, and all form fields are always editable. No useEffect or handler should ever cause repeated resets!
  *
- * Form field state is initialized ONLY when modal opens (detected by a change in restaurant/initialDetails)
- * and remains user-editable. No re-initialization/reset occurs on each user edit or render.
- * All fields are always controlled only by local state and per-input handlers.
+ * - All input values are controlled from local state.
+ * - Fields are initialized on modal open or restaurant change.
+ * - No field state is controlled by props or reset by a useEffect using field state as dependency.
  */
 function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantName, restaurant }) {
-  // Track last restaurantId/modal key to detect when modal opens (or restaurant changes)
-  const lastResetKey = useRef("");
-  // Determine effective key for modal reopen or new restaurant/modal
-  const resetKey =
-    String(initialDetails.restaurantId ?? "") +
-    "|" +
-    String(restaurantName ?? "") +
-    "|" +
-    String(restaurant?.id ?? "");
+  // Reset key: only changes when restaurantId, modal open, or initialDetails change (NOT field values!)
+  const resetKey = React.useMemo(
+    () =>
+      String(initialDetails.restaurantId ?? "") +
+      "|" +
+      String(restaurantName ?? "") +
+      "|" +
+      String(restaurant?.id ?? ""),
+    [initialDetails.restaurantId, restaurantName, restaurant?.id]
+  );
 
-  // Controlled field states (always used for value/onChange)
+  // Local state for all fields. Initialized only when resetKey changes.
   const [date, setDate] = useState(initialDetails.date || "");
   const [time, setTime] = useState(initialDetails.time || "");
   const [guests, setGuests] = useState(initialDetails.guests || 2);
@@ -38,28 +32,21 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
   const [contactPhone, setContactPhone] = useState(initialDetails.contactPhone || "");
   const [errors, setErrors] = useState({});
 
-  // Imperatively reset field state ONLY when modal is opened again (or restaurant changes)
-  if (lastResetKey.current !== resetKey) {
-    lastResetKey.current = resetKey;
-    // Do not reset on every render/user edit - only upon this modal context change
-    // Use initialDetails/restaurantName only for initial fill
-    if (initialDetails) {
-      setDate(initialDetails.date || "");
-      setTime(initialDetails.time || "");
-      setGuests(initialDetails.guests || 2);
-      setContactName(initialDetails.contactName || "");
-      setContactEmail(initialDetails.contactEmail || "");
-      setContactPhone(initialDetails.contactPhone || "");
-    } else {
-      setDate("");
-      setTime("");
-      setGuests(2);
-      setContactName("");
-      setContactEmail("");
-      setContactPhone("");
-    }
+  // Ref for checking if first mount to avoid double-init
+  const didFirstInit = useRef(false);
+
+  // Reset form state ONLY on resetKey change (i.e., modal open/close, restaurant change).
+  useEffect(() => {
+    setDate(initialDetails.date || "");
+    setTime(initialDetails.time || "");
+    setGuests(initialDetails.guests || 2);
+    setContactName(initialDetails.contactName || "");
+    setContactEmail(initialDetails.contactEmail || "");
+    setContactPhone(initialDetails.contactPhone || "");
     setErrors({});
-  }
+    didFirstInit.current = true;
+    // eslint-disable-next-line
+  }, [resetKey]);
 
   // PUBLIC_INTERFACE
   function validateFields() {
