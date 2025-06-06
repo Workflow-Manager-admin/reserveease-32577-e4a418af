@@ -271,6 +271,88 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
           />
           {errors.contactContact && <div style={errorStyle}>{errors.contactContact}</div>}
         </div>
+        {/* Table Area Preference */}
+        <div style={formGroupStyle}>
+          <label style={labelStyle}>
+            Table Preference <span style={{ color: "var(--accent)" }}>*</span>
+          </label>
+          <div style={{ display: "flex", gap: 18, marginTop: 7 }}>
+            <label>
+              <input
+                type="radio"
+                name="table-area"
+                value="Indoor"
+                checked={tableArea === "Indoor"}
+                onChange={handleTableAreaChange}
+                style={{ marginRight: 6 }}
+                required
+              />
+              Indoor
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="table-area"
+                value="Outdoor"
+                checked={tableArea === "Outdoor"}
+                onChange={handleTableAreaChange}
+                style={{ marginRight: 6 }}
+                required
+              />
+              Outdoor
+            </label>
+          </div>
+          {errors.tableArea && <div style={errorStyle}>{errors.tableArea}</div>}
+        </div>
+        {/* Window Seat Preference */}
+        <div style={formGroupStyle}>
+          <label style={labelStyle}>
+            Window Seat <span style={{ color: "var(--accent)" }}>*</span>
+          </label>
+          <div style={{ display: "flex", gap: 18, marginTop: 7 }}>
+            <label>
+              <input
+                type="radio"
+                name="window-seat"
+                value="true"
+                checked={windowSeat === true}
+                onChange={handleWindowSeatChange}
+                style={{ marginRight: 6 }}
+                required
+              />
+              Yes
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="window-seat"
+                value="false"
+                checked={windowSeat === false}
+                onChange={handleWindowSeatChange}
+                style={{ marginRight: 6 }}
+                required
+              />
+              No
+            </label>
+          </div>
+          {errors.windowSeat && <div style={errorStyle}>{errors.windowSeat}</div>}
+        </div>
+        {/* Special Request field */}
+        <div style={formGroupStyle}>
+          <label htmlFor="special-request" style={labelStyle}>
+            Special Request
+          </label>
+          <textarea
+            id="special-request"
+            rows={2}
+            value={specialRequest}
+            onChange={handleSpecialRequestChange}
+            style={{
+              ...inputStyle(false), resize: "vertical", fontFamily: "inherit", minHeight: 38, maxHeight: 84,
+            }}
+            placeholder="Any special requests? (e.g. birthday, allergies)"
+          />
+        </div>
         {/* Buttons */}
         <div style={{ display: "flex", gap: 14, marginTop: 8, justifyContent: "center" }}>
           <button type="submit" className="btn btn-large" style={{ minWidth: 110 }}>
@@ -299,7 +381,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
       }}>
         {/* Display all input state for live debugging */}
         {JSON.stringify(
-          { date, time, guests, contactName, contactEmail, contactPhone, resetKey },
+          { date, time, guests, contactName, contactEmail, contactPhone, tableArea, windowSeat, specialRequest, resetKey },
           null,
           2
         )}

@@ -71,6 +71,40 @@ function App() {
         ...formData,
       };
       setReservations((prev) => [...prev, reservation]);
+
+      // Reminder notification logic (only if Notification API available)
+      try {
+        if ('Notification' in window) {
+          if (Notification.permission === "default") {
+            Notification.requestPermission(); // non-blocking, will be honored on next booking
+          }
+          if (Notification.permission === "granted") {
+            // Compute 1h before reservation
+            const dateStr = reservation.date || "";
+            const timeStr = reservation.time || "";
+            if (dateStr && timeStr) {
+              const resDate = new Date(`${dateStr}T${timeStr}`);
+              if (!isNaN(resDate.getTime())) {
+                const before1h = new Date(resDate.getTime() - 60 * 60 * 1000);
+                const msDelay = before1h.getTime() - Date.now();
+                if (msDelay > 5000) {  // ignore notifications for past or <5s-away errors
+                  setTimeout(() => {
+                    // Notification content (limit to base info)
+                    new Notification("Reservation Reminder", {
+                      body: `You have a reservation at ${reservation.restaurantName || 'the restaurant'} at ${reservation.time}.`
+                    });
+                  }, msDelay);
+                }
+              }
+            }
+          }
+        }
+      } catch (e) {
+        // Silent fail for prototype
+        // eslint-disable-next-line no-console
+        console.log("Notification API error:", e);
+      }
+
       closeReservationModal();
       // Redirect to confirmation with reservation details (use location state)
       navigate('/confirmation', { state: { reservation } });
