@@ -10,7 +10,7 @@ import restaurants from "../data/restaurants"; // Import shared restaurant data
  * Props:
  *   - onReserve: function(restaurantId) to open modal (from app)
  */
-function RestaurantList({ onReserve }) {
+function RestaurantList({ onReserve, isFavourite, onToggleFavourite }) {
   const navigate = useNavigate();
 
   // Navigate to the RestaurantDetails page using restaurant ID as a route parameter
@@ -51,6 +51,8 @@ function RestaurantList({ onReserve }) {
           restaurant={restaurant}
           onOpenDetails={handleOpenDetails}
           onClickReserve={handleClickReserve}
+          isFavourite={isFavourite}
+          onToggleFavourite={onToggleFavourite}
         />
       ))}
       <div style={{ height: 12 }} />
