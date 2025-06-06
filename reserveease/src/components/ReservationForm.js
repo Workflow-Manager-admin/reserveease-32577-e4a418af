@@ -45,6 +45,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
     e.preventDefault();
     if (validateFields()) {
       const reservationData = {
+        restaurantId: initialDetails.restaurantId,
         date,
         time,
         guests: Number(guests),
