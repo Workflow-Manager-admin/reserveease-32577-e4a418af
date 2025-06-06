@@ -9,7 +9,7 @@ import MyReservations from './components/MyReservations';
 import Modal from './components/Modal';
 import Navbar from './components/Navbar';
 import Favourites from './components/Favourites';
-import restaurants from './data/restaurants';
+import restaurantsInitialData from './data/restaurants';
 
 /**
  * PUBLIC_INTERFACE
@@ -24,8 +24,21 @@ function App() {
   // In-memory state for reservations in current session
   const [reservations, setReservations] = useState([]);
 
+  // Reviews and ratings: managed in-memory (NOT persisted)
+  // We'll track a local copy, synced on review action
+  const [restaurants, setRestaurants] = useState(
+    restaurantsInitialData.map(r => ({ ...r }))
+  );
+
   // Favourites: store an array of restaurant ids (no persistence)
   const [favourites, setFavourites] = useState([]);
+
+  // Calculate average rating for a restaurant's reviews
+  function calculateAverageRating(reviews) {
+    if (!reviews || !reviews.length) return null;
+    const sum = reviews.reduce((acc, r) => acc + (parseInt(r.rating, 10) || 0), 0);
+    return Math.round((sum / reviews.length) * 10) / 10;
+  }
 
   // PUBLIC_INTERFACE
   function isFavourite(restaurantId) {
@@ -83,6 +96,32 @@ function App() {
 
     // List of favourite restaurant objects
     const favouriteRestaurants = restaurants.filter(r => favourites.includes(r.id));
+
+    // PUBLIC_INTERFACE
+    // Submit a review for a restaurant by its ID
+    function handleSubmitReview({ restaurantId, reservationId, reviewerName, reviewText, rating }) {
+      setRestaurants(prev =>
+        prev.map(r => {
+          if (String(r.id) === String(restaurantId)) {
+            const newReview = {
+              id: `review_${reservationId || Math.random().toString(36).substring(2,8) + "_" + Date.now()}`,
+              reviewerName,
+              text: reviewText,
+              rating: parseInt(rating, 10),
+              date: new Date().toISOString(),
+              forReservationId: reservationId || null,
+            };
+            const reviews = [...(r.reviews || []), newReview];
+            return {
+              ...r,
+              reviews,
+              averageRating: calculateAverageRating(reviews),
+            };
+          }
+          return r;
+        })
+      );
+    }
 
     /**
      * Handles both adding a new reservation and editing an existing one.
@@ -307,6 +346,7 @@ function App() {
                     onReserve={openReservationModal}
                     isFavourite={isFavourite}
                     onToggleFavourite={toggleFavourite}
+                    restaurants={restaurants}
                   />
                 }
               />
@@ -327,6 +367,7 @@ function App() {
                     onReserve={openReservationModal}
                     isFavourite={isFavourite}
                     onToggleFavourite={toggleFavourite}
+                    restaurants={restaurants}
                   />
                 }
               />
@@ -351,6 +392,8 @@ function App() {
                     reservations={reservations}
                     onEditReservation={handleEditReservation}
                     onCancelReservation={handleCancelReservation}
+                    restaurants={restaurants}
+                    onSubmitReview={handleSubmitReview}
                   />
                 }
               />
