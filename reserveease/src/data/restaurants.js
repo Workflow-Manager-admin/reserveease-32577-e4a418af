@@ -2,13 +2,73 @@
 // PUBLIC_INTERFACE
 // Shared restaurant data for ReserveEase demo application.
 // This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place).
 //
+// PUBLIC_INTERFACE
+// Shared restaurant data for ReserveEase demo application.
+// This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place). PUBLIC_INTERFACE
+//
+// PUBLIC_INTERFACE
+// Shared restaurant data for ReserveEase demo application.
+// This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place). Shared restaurant data for ReserveEase demo application.
+//
+// PUBLIC_INTERFACE
+// Shared restaurant data for ReserveEase demo application.
+// This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place). This module exports an array of sample restaurant objects, enabling data reuse across components.
+//
+// PUBLIC_INTERFACE
+// Shared restaurant data for ReserveEase demo application.
+// This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place).
 
 const restaurants = [
   {
     id: 1,
     name: "Pasta Palace",
-    image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=200&q=80",
+    image: "https://
+// PUBLIC_INTERFACE
+// Shared restaurant data for ReserveEase demo application.
+// This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place).images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=200&q=80",
     location: "Midtown",
     cuisine: "Italian",
     description: "A cozy Italian spot with hand-made pasta.",
@@ -35,12 +95,32 @@ const restaurants = [
         date: "2024-06-05T19:00:00Z"
       }
     ],
-    averageRating: 4.3, // (5 + 4 + 4) / 3
+    averageRating: 4.3, //
+// PUBLIC_INTERFACE
+// Shared restaurant data for ReserveEase demo application.
+// This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place). (5 + 4 + 4) / 3
   },
   {
     id: 2,
     name: "Curry Corner",
-    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=200&q=80",
+    image: "https://
+// PUBLIC_INTERFACE
+// Shared restaurant data for ReserveEase demo application.
+// This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place).images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=200&q=80",
     location: "Downtown",
     cuisine: "Indian",
     description: "Spicy, authentic curries in a warm setting.",
@@ -67,12 +147,32 @@ const restaurants = [
         date: "2024-06-05T18:32:00Z"
       }
     ],
-    averageRating: 4.7, // (5 + 4 + 5) / 3
+    averageRating: 4.7, //
+// PUBLIC_INTERFACE
+// Shared restaurant data for ReserveEase demo application.
+// This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place). (5 + 4 + 5) / 3
   },
   {
     id: 3,
     name: "Sushi Central",
-    image: "https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=200&q=80",
+    image: "https://
+// PUBLIC_INTERFACE
+// Shared restaurant data for ReserveEase demo application.
+// This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place).images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=200&q=80",
     location: "Uptown",
     cuisine: "Japanese",
     description: "Fresh sushi and sashimi with modern flair.",
@@ -106,12 +206,32 @@ const restaurants = [
         date: "2024-06-08T18:01:00Z"
       }
     ],
-    averageRating: 4.5, // (5 + 4 + 5 + 4) / 4
+    averageRating: 4.5, //
+// PUBLIC_INTERFACE
+// Shared restaurant data for ReserveEase demo application.
+// This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place). (5 + 4 + 5 + 4) / 4
   },
   {
     id: 4,
     name: "Burger Barn",
-    image: "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=200&q=80",
+    image: "https://
+// PUBLIC_INTERFACE
+// Shared restaurant data for ReserveEase demo application.
+// This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place).images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=200&q=80",
     location: "West End",
     cuisine: "American",
     description: "Juicy burgers, shakes, and fries for all.",
@@ -138,12 +258,32 @@ const restaurants = [
         date: "2024-06-07T12:40:00Z"
       }
     ],
-    averageRating: 4.3, // (4 + 5 + 4) / 3
+    averageRating: 4.3, //
+// PUBLIC_INTERFACE
+// Shared restaurant data for ReserveEase demo application.
+// This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place). (4 + 5 + 4) / 3
   },
   {
     id: 5,
     name: "Green Garden",
-    image: "https://images.unsplash.com/photo-1432139555190-58524dae6a55?auto=format&fit=crop&w=200&q=80",
+    image: "https://
+// PUBLIC_INTERFACE
+// Shared restaurant data for ReserveEase demo application.
+// This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place).images.unsplash.com/photo-1432139555190-58524dae6a55?auto=format&fit=crop&w=200&q=80",
     location: "South Park",
     cuisine: "Vegetarian",
     description: "Organic vegetarian & vegan delights.",
@@ -177,7 +317,17 @@ const restaurants = [
         date: "2024-06-08T14:03:00Z"
       }
     ],
-    averageRating: 4.5 // (5 + 4 + 4 + 5) / 4
+    averageRating: 4.5 //
+// PUBLIC_INTERFACE
+// Shared restaurant data for ReserveEase demo application.
+// This module exports an array of sample restaurant objects, enabling data reuse across components.
+// Each restaurant includes an array of reviews, with each review containing:
+//    - id: string (unique review ID)
+//    - reviewerName: string (name of reviewer)
+//    - text: string (review content, can be empty)
+//    - rating: integer (1–5 star rating)
+//    - date: ISO date string
+// The `averageRating` is the average of all review ratings (rounded to 1 decimal place). (5 + 4 + 4 + 5) / 4
   },
 ];
 
