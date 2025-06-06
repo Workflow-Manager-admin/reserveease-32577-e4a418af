@@ -53,6 +53,31 @@ function ConfirmationPage() {
               : reservation.contactPhone}
           </>
         )}
+        {/* Table Preferences */}
+        {reservation.tableArea && (
+          <>
+            <br />
+            <strong>Table Preference:</strong> {reservation.tableArea}
+          </>
+        )}
+        {typeof reservation.windowSeat !== "undefined" && (
+          <>
+            <br />
+            <strong>Window Seat:</strong>{" "}
+            {reservation.windowSeat === true || reservation.windowSeat === "true"
+              ? "Yes"
+              : reservation.windowSeat === false || reservation.windowSeat === "false"
+              ? "No"
+              : ""}
+          </>
+        )}
+        {/* Special Request */}
+        {reservation.specialRequest && reservation.specialRequest.trim() && (
+          <>
+            <br />
+            <strong>Special Request:</strong> {reservation.specialRequest}
+          </>
+        )}
       </div>
       <div style={{ marginTop: 20, display: "flex", justifyContent: "center", gap: 12 }}>
         <button className="btn btn-large" onClick={() => navigate("/")}>
