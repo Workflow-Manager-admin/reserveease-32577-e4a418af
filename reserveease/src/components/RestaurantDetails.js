@@ -104,9 +104,13 @@ function RestaurantDetails({ onReserve }) {
                 fontSize: "1.07rem",
                 marginRight: 12,
               }}
-              onClick={() =>
-                onReserve ? onReserve(restaurant.id) : navigate(`/reserve/${restaurant.id}`)
-              }
+              onClick={() => {
+                if (onReserve) {
+                  onReserve(restaurant.id);
+                } else {
+                  navigate(`/reserve/${restaurant.id}`);
+                }
+              }}
             >
               Reserve
             </button>
