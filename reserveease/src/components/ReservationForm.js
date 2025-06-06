@@ -13,7 +13,7 @@ import React, { useState, useEffect, useRef } from "react";
  * - Current state (including resetKey) is rendered at the bottom for live debugging
  * - Any issue found with instant value reset due to parent effect or prop is logged and flagged
  */
-function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantName, restaurant }) {
+function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantName, restaurant, isEditing }) {
   // Compose a reset key based on context (restaurant/modal open)
   const resetKey = React.useMemo(
     () =>
@@ -173,7 +173,9 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
           marginBottom: 22,
         }}
       >
-        {restaurantName ?? "Reserve a Table"}
+        {isEditing
+          ? `Edit Reservation${restaurantName ? ` for ${restaurantName}` : ""}`
+          : restaurantName ?? "Reserve a Table"}
       </h2>
       <form onSubmit={handleFormSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
         {/* Date */}
@@ -360,7 +362,7 @@ function ReservationForm({ onSubmit, onCancel, initialDetails = {}, restaurantNa
         {/* Buttons */}
         <div style={{ display: "flex", gap: 14, marginTop: 8, justifyContent: "center" }}>
           <button type="submit" className="btn btn-large" style={{ minWidth: 110 }}>
-            Reserve
+            {isEditing ? "Update" : "Reserve"}
           </button>
           {onCancel && (
             <button
