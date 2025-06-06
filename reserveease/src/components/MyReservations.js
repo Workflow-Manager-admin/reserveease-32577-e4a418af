@@ -139,36 +139,74 @@ function MyReservations({
                   </div>
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  <button
-                    className="btn"
-                    style={{
-                      background: "var(--primary)",
-                      color: "var(--background-dark)",
-                      minWidth: 76,
-                      cursor: future ? "pointer" : "not-allowed",
-                      opacity: future ? 1 : 0.6,
-                      marginBottom: 4,
-                    }}
-                    disabled={!future}
-                    onClick={() => future && onEditReservation && onEditReservation(res)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn"
-                    style={{
-                      background: "none",
-                      color: "var(--accent)",
-                      border: "1.3px solid var(--accent)",
-                      minWidth: 76,
-                      cursor: future ? "pointer" : "not-allowed",
-                      opacity: future ? 1 : 0.5,
-                    }}
-                    disabled={!future}
-                    onClick={() => future && handleCancel(res)}
-                  >
-                    Cancel
-                  </button>
+                  {/* PUBLIC_INTERFACE - Edit Button */}
+                  {future ? (
+                    <button
+                      className="btn"
+                      style={{
+                        background: "var(--primary)",
+                        color: "var(--background-dark)",
+                        minWidth: 76,
+                        cursor: "pointer",
+                        opacity: 1,
+                        marginBottom: 4,
+                      }}
+                      onClick={() => onEditReservation && onEditReservation(res)}
+                    >
+                      Edit
+                    </button>
+                  ) : (
+                    <button
+                      className="btn"
+                      style={{
+                        background: "var(--primary)",
+                        color: "var(--background-dark)",
+                        minWidth: 76,
+                        cursor: "not-allowed",
+                        opacity: 0.6,
+                        marginBottom: 4,
+                      }}
+                      disabled
+                      tabIndex={-1}
+                      aria-disabled="true"
+                    >
+                      Edit
+                    </button>
+                  )}
+                  {/* PUBLIC_INTERFACE - Cancel Button */}
+                  {future ? (
+                    <button
+                      className="btn"
+                      style={{
+                        background: "none",
+                        color: "var(--accent)",
+                        border: "1.3px solid var(--accent)",
+                        minWidth: 76,
+                        cursor: "pointer",
+                        opacity: 1,
+                      }}
+                      onClick={() => handleCancel(res)}
+                    >
+                      Cancel
+                    </button>
+                  ) : (
+                    <button
+                      className="btn"
+                      style={{
+                        background: "none",
+                        color: "var(--accent)",
+                        border: "1.3px solid var(--accent)",
+                        minWidth: 76,
+                        cursor: "not-allowed",
+                        opacity: 0.5,
+                      }}
+                      disabled
+                      tabIndex={-1}
+                      aria-disabled="true"
+                    >
+                      Cancel
+                    </button>
+                  )}
                 </div>
               </div>
             );
